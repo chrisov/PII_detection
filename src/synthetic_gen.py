@@ -1,0 +1,4 @@
+import Faker
+
+faker = Faker()
+
