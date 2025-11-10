@@ -1,4 +1,0 @@
-import Faker
-
-faker = Faker()
-
