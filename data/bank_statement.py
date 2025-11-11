@@ -17,13 +17,13 @@ merchants = ['Amazon', 'Walmart', 'Shell Gas', 'Starbucks', 'ATM Withdrawal', 'G
 
 incomes = ['ACME Corp Payroll', 'Interest Payment', 'Transfer from Client Services Inc', 'Rental Income Deposit', 'Retailer Refund']
 
-class bank_statement:
+class statement:
 
 	def __init__(self):
 		self._holder = holder.account_holder()
 		self._month = rd.randint(1, 12)
 		self._year = rd.randint(2015, 2025)
-		self._issue_date = date(self._year, self._month, cal.monthrange(self._year, self._month)[1])
+		self._issue_date = date(self._year, self._month, cal.monthrange(self._year, self._month)[1]).strftime("%d %b %Y")
 		self._balance = round(rd.uniform(3000, 10000), 2)
 		self._history = self.generate_transactions()
 		self.calculate_balances()
@@ -82,8 +82,8 @@ class bank_statement:
 		balance = {
 			"date": date(self._year, self._month, 1),
 			"merchant": "BALANCE B/F",
-			"credit": None,
-			"debit": None,
+			"credit": "",
+			"debit": "",
 			"balance": self._balance,
 			}
 		debits = self.generate_debit()
@@ -96,6 +96,8 @@ class bank_statement:
 		transactions = [*salary, *debits, *credits]
 		transactions.sort(key=lambda transaction: transaction["date"])
 		transactions.insert(0, balance)
+		for t in transactions:
+			t["date"] = t["date"].strftime("%d %b %Y")
 		return transactions
 	
 	def	calculate_balances(self):
@@ -109,7 +111,24 @@ class bank_statement:
 					item["balance"] = round(previous_balance + item["credit"], 2)
 				else:
 					item["balance"] = round(previous_balance - item["debit"], 2)
+	
+	def calculate_total_debits(self):
+		result = 0.0
+		for item in self._history:
+			try:
+				result += float(item.get("debit", 0) or 0)
+			except (ValueError, TypeError):
+				pass
+		return round(result, 2)
 
+	def calculate_total_credits(self):
+		result = 0.0
+		for item in self._history:
+			try:
+				result += float(item.get("credit", 0) or 0)
+			except (ValueError, TypeError):
+				pass
+		return round(result, 2)
 
 	def __repr__(self):
 		res = f"{colorama.Fore.GREEN}Bank Statement {colorama.Style.RESET_ALL}{'-' * 45}\n"
@@ -120,7 +139,6 @@ class bank_statement:
 		res += f"{'-' * 45 + colorama.Fore.RED + ' Bank Statement' + colorama.Style.RESET_ALL}"
 		return res
 
-if __name__ == "__main__":
-
-	statement = bank_statement()
-	print(statement)
+# if __name__ == "__main__":
+# 	statement = statement()
+# 	print(statement)

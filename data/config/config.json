@@ -1,0 +1,5 @@
+{
+	"templates_dir": "templates/html",
+	"results_dir": "results/",
+	"iterations": 10
+}

@@ -9,7 +9,7 @@ class account_holder:
 	def __init__(self):
 		self._name = fake.name()
 		self._ssn = fake.ssn()
-		self._address = fake.address().replace("\n", " ")
+		self._address = fake.address()
 		self._account_number = fake.bban()
 		self._routing_number = fake.aba()
 		self._phone_number = fake.phone_number()
