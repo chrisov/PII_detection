@@ -7,7 +7,7 @@ import logging
 
 # Resolve config path - try a few common locations (repo root ./config and ./data/config)
 candidate_paths = [
-	# Path(__file__).resolve().parent.parent / "config" / "config.json",  # repo_root/config/config.json
+	Path(__file__).resolve().parent.parent / "config" / "config.json",  # repo_root/config/config.json
 	Path(__file__).resolve().parent / "config" / "config.json",         # data/config/config.json (next to this script)
 ]
 
