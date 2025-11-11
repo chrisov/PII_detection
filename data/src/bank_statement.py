@@ -24,10 +24,11 @@ class bank_statement:
 		self._month = rd.randint(1, 12)
 		self._year = rd.randint(2015, 2025)
 		self._issue_date = date(self._year, self._month, cal.monthrange(self._year, self._month)[1])
-		self._balance = round(rd.uniform(1000, 10000), 2)
+		self._balance = round(rd.uniform(3000, 10000), 2)
 		self._history = self.generate_transactions()
+		self.calculate_balances()
 
-	def generate_debit(self, num_transactions=rd.randint(2, 20)):
+	def generate_debit(self, num_transactions=rd.randint(10, 25)):
 		"""
 		Generates a list of debit transactions for a person, with the following attributes:
 		date, merchant, amount, account, type.
@@ -45,8 +46,7 @@ class bank_statement:
 					start_date=date(self._year, self._month, 1),
 					end_date=date(self._year, self._month, cal.monthrange(self._year, self._month)[1])),
 				"merchant": rd.choice(merchants),
-				"amount": round(rd.uniform(5, 500), 2),
-				"type": "debit"
+				"debit": round(rd.uniform(5, 500), 2),
 			})
 		return transactions
 
@@ -67,8 +67,7 @@ class bank_statement:
 					start_date=date(self._year, self._month, 1),
 					end_date=date(self._year, self._month, cal.monthrange(self._year, self._month)[1])),
 				"merchant": incomes[i],
-				"amount": round(rd.uniform(300, 1000), 2),
-				"type": "credit"
+				"credit": round(rd.uniform(300, 1000), 2),
 			})
 		return transactions
 
@@ -80,29 +79,48 @@ class bank_statement:
 		Returns (list[dict]): A list of transactions.
 		"""
 
-		transactions = []
+		balance = {
+			"date": date(self._year, self._month, 1),
+			"merchant": "BALANCE B/F",
+			"credit": None,
+			"debit": None,
+			"balance": self._balance,
+			}
 		debits = self.generate_debit()
 		credits = self.generate_credit()
 		salary = [{
 			"date": date(self._year, self._month, 1),
 			"merchant": incomes[0],
-			"amount": round(rd.uniform(1000, 3000), 2),
-			"type": "debit"
+			"credit": round(rd.uniform(1000, 3000), 2),
 			}]
 		transactions = [*salary, *debits, *credits]
 		transactions.sort(key=lambda transaction: transaction["date"])
+		transactions.insert(0, balance)
 		return transactions
+	
+	def	calculate_balances(self):
+		history = self._history
+		for i, item in enumerate(history):
+			if i == 0:
+				item["balance"] = self._balance
+			else:
+				previous_balance = history[i - 1]["balance"]
+				if 'credit' in item:
+					item["balance"] = round(previous_balance + item["credit"], 2)
+				else:
+					item["balance"] = round(previous_balance - item["debit"], 2)
+
 
 	def __repr__(self):
-		res = f"{colorama.Fore.GREEN + "Bank Statement " + colorama.Style.RESET_ALL + "-" * 45}\n"
+		res = f"{colorama.Fore.GREEN}Bank Statement {colorama.Style.RESET_ALL}{'-' * 45}\n"
 		res += f"{self._holder}\n"
-		res += f"{colorama.Fore.YELLOW}Bank statement issue date{colorama.Style.RESET_ALL }: {self._issue_date}\n"
-		res += f"{colorama.Fore.YELLOW}Account init balance{colorama.Style.RESET_ALL }: {self._balance}\n"
-		res += f"{tabulate(self._history, headers="keys", tablefmt="pretty")}\n"
-		res += f"{"-" * 45 + colorama.Fore.RED + " Bank Statement" + colorama.Style.RESET_ALL}"
+		res += f"{colorama.Fore.YELLOW}Issue date{colorama.Style.RESET_ALL}: {self._issue_date}\n"
+		res += f"{colorama.Fore.YELLOW}Init balance{colorama.Style.RESET_ALL}: {self._balance}\n"
+		res += tabulate(self._history, headers="keys", tablefmt="pretty") + "\n"
+		res += f"{'-' * 45 + colorama.Fore.RED + ' Bank Statement' + colorama.Style.RESET_ALL}"
 		return res
 
-# if __name__ == "__main__":
+if __name__ == "__main__":
 
-# 	statement = bank_statement()
-# 	print(statement)
+	statement = bank_statement()
+	print(statement)

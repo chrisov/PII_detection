@@ -16,15 +16,15 @@ class account_holder:
 		self._email = fake.email()
 	
 	def __repr__(self):
-		res = f"{colorama.Fore.GREEN + "Person " + colorama.Style.RESET_ALL + "-" * 40}\n"
-		res += f"{colorama.Fore.YELLOW} Name{colorama.Style.RESET_ALL}: {self._name}\n"
-		res += f"{colorama.Fore.YELLOW} SSN{colorama.Style.RESET_ALL}: {self._ssn}\n"
-		res += f"{colorama.Fore.YELLOW} Acount number{colorama.Style.RESET_ALL}: {self._account_number}\n"
-		res += f"{colorama.Fore.YELLOW} Routing number{colorama.Style.RESET_ALL}: {self._routing_number}\n"
-		res += f"{colorama.Fore.YELLOW} Phone number{colorama.Style.RESET_ALL}: {self._phone_number}\n"
-		res += f"{colorama.Fore.YELLOW} Home address{colorama.Style.RESET_ALL}: {self._address}\n"
-		res += f"{colorama.Fore.YELLOW} Email address{colorama.Style.RESET_ALL}: {self._email}\n"
-		res += f"{"-" * 40 + colorama.Fore.RED + " Person" + colorama.Style.RESET_ALL}"
+		res = f"{colorama.Fore.GREEN + 'Person ' + colorama.Style.RESET_ALL + '-' * 40}\n"
+		res += f"{colorama.Fore.YELLOW}  Name{colorama.Style.RESET_ALL}: {self._name}\n"
+		res += f"{colorama.Fore.YELLOW}  SSN{colorama.Style.RESET_ALL}: {self._ssn}\n"
+		res += f"{colorama.Fore.YELLOW}  Acount number{colorama.Style.RESET_ALL}: {self._account_number}\n"
+		res += f"{colorama.Fore.YELLOW}  Routing number{colorama.Style.RESET_ALL}: {self._routing_number}\n"
+		res += f"{colorama.Fore.YELLOW}  Phone number{colorama.Style.RESET_ALL}: {self._phone_number}\n"
+		res += f"{colorama.Fore.YELLOW}  Home address{colorama.Style.RESET_ALL}: {self._address}\n"
+		res += f"{colorama.Fore.YELLOW}  Email address{colorama.Style.RESET_ALL}: {self._email}\n"
+		res += f"{'-' * 40 + colorama.Fore.RED + ' Person' + colorama.Style.RESET_ALL}"
 		return res
 
 def generate_person():

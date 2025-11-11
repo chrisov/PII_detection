@@ -1,9 +1,9 @@
 import sys
 import os
 
-SRC_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "src"))
+# SRC_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "src"))
 
-sys.path.append(SRC_PATH)
+# sys.path.append(SRC_PATH)
 
 import bank_statement as bs
 
