@@ -31,7 +31,9 @@ class statement:
 		self._balance = round(rd.uniform(3000, 10000), 2)
 		self._history = self.generate_transactions()
 		self.calculate_balances()
-	
+
+
+
 	def generate_debit(self, num_transactions=rd.randint(10, 25)):
 		"""
 		Generates a list of debit transactions for a person, with the following attributes:
@@ -54,6 +56,8 @@ class statement:
 			})
 		return transactions
 
+
+
 	def	generate_credit(self, num_transactions=rd.randint(1, 4)):
 		"""
 		Generates a list of credit transactions for a person, with the following attributes:
@@ -74,6 +78,8 @@ class statement:
 				"credit": round(rd.uniform(300, 1000), 2),
 			})
 		return transactions
+
+
 
 	def generate_transactions(self):
 		"""
@@ -104,7 +110,13 @@ class statement:
 			t["date"] = t["date"].strftime("%d %b %Y")
 		return transactions
 	
+
+
 	def	calculate_balances(self):
+		"""
+		Calculates the balances column in the statement and stores them in the history.
+		"""
+
 		history = self._history
 		for i, item in enumerate(history):
 			if i == 0:
@@ -116,7 +128,12 @@ class statement:
 				else:
 					item["balance"] = round(previous_balance - item["debit"], 2)
 	
+
 	def calculate_total_debits(self):
+		"""
+		Calculates and returns the statement's total debits.
+		"""
+	
 		result = 0.0
 		for item in self._history:
 			try:
@@ -125,7 +142,13 @@ class statement:
 				pass
 		return round(result, 2)
 
+
+
 	def calculate_total_credits(self):
+		"""
+		Calculates and returns the statement's total credits.
+		"""
+
 		result = 0.0
 		for item in self._history:
 			try:
@@ -133,6 +156,8 @@ class statement:
 			except (ValueError, TypeError):
 				pass
 		return round(result, 2)
+
+
 
 	def __repr__(self):
 		res = f"{colorama.Fore.GREEN}Bank Statement {colorama.Style.RESET_ALL}{'-' * 45}\n"
@@ -143,6 +168,8 @@ class statement:
 		res += f"{'-' * 45 + colorama.Fore.RED + ' Bank Statement' + colorama.Style.RESET_ALL}"
 		return res
 
-# if __name__ == "__main__":
-# 	statement = statement()
-# 	print(statement)
+
+
+if __name__ == "__main__":
+	statement = statement()
+	print(statement)
