@@ -2,6 +2,7 @@ import calendar as cal
 import random as rd
 import account_holder as holder
 import colorama
+import logging
 from faker import Faker
 from datetime import date
 from tabulate import tabulate
@@ -20,6 +21,9 @@ incomes = ['ACME Corp Payroll', 'Interest Payment', 'Transfer from Client Servic
 class statement:
 
 	def __init__(self):
+		logging.basicConfig(level=logging.INFO)
+		logger = logging.getLogger(__name__)
+		logger.info(" Generating the statement instance")
 		self._holder = holder.account_holder()
 		self._month = rd.randint(1, 12)
 		self._year = rd.randint(2015, 2025)
@@ -27,7 +31,7 @@ class statement:
 		self._balance = round(rd.uniform(3000, 10000), 2)
 		self._history = self.generate_transactions()
 		self.calculate_balances()
-
+	
 	def generate_debit(self, num_transactions=rd.randint(10, 25)):
 		"""
 		Generates a list of debit transactions for a person, with the following attributes:

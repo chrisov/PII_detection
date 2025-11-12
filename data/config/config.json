@@ -1,5 +1,5 @@
 {
-	"templates_dir": "templates/html",
-	"results_dir": "results/",
+	"input_dir": "templates/html",
+	"output_dir": "pdfs/",
 	"iterations": 10
 }

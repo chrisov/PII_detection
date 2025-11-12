@@ -7,8 +7,10 @@ import logging
 
 # Resolve config path - try a few common locations (repo root ./config and ./data/config)
 candidate_paths = [
-	Path(__file__).resolve().parent.parent / "config" / "config.json",  # repo_root/config/config.json
+	# Prefer the data-local config first so running scripts under `data/` picks
+	# the nearby configuration by default. Fall back to repo-root config.
 	Path(__file__).resolve().parent / "config" / "config.json",         # data/config/config.json (next to this script)
+	Path(__file__).resolve().parent.parent / "config" / "config.json",  # repo_root/config/config.json
 ]
 
 CONFIG_PATH = None
@@ -24,19 +26,22 @@ if CONFIG_PATH is None:
 with open(CONFIG_PATH) as f:
 	config = json.load(f)
 
+logger = logging.getLogger(__name__)
+logger.info("Using config file: %s", CONFIG_PATH)
+
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 def generate_pdfs():
 	# Resolve templates and results dirs relative to the repository root when paths are relative
 	repo_root = CONFIG_PATH.parent.parent
-	template_dir = Path(config.get("templates_dir", "templates/html"))
+	template_dir = Path(config.get("input_dir", "templates/html"))
 	if not template_dir.is_absolute():
 		template_dir = (repo_root / template_dir).resolve()
 
-	results_dir = Path(config.get("results_dir", "results"))
-	if not results_dir.is_absolute():
-		results_dir = (repo_root / results_dir).resolve()
+	base_output_dir = Path(config.get("output_dir", "pdfs"))
+	if not base_output_dir.is_absolute():
+		base_output_dir = (repo_root / base_output_dir).resolve()
 
 	env = Environment(
 		loader=FileSystemLoader(str(template_dir)),
@@ -65,9 +70,11 @@ def generate_pdfs():
 						statement=statement
 					)
 
-					output_dir = results_dir / template_file.stem
-					output_dir.mkdir(parents=True, exist_ok=True)
-					name = output_dir / f"{template_file.stem}_{i}.html"
+					# write each template's outputs under a single directory named after
+					# the template (avoid mutating the base output dir across iterations)
+					template_output_dir = base_output_dir / template_file.stem
+					template_output_dir.mkdir(parents=True, exist_ok=True)
+					name = template_output_dir / f"{template_file.stem}_{i}.html"
 					with open(name, "w", encoding="utf-8") as f:
 						f.write(renderer)
 
