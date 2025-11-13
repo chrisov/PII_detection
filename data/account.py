@@ -1,0 +1,26 @@
+from account_holder import bank_client
+from bank_statement import statement
+from synthetic_gen import generate_pdfs
+from colorama import init, Fore, Style
+from faker import Faker
+
+init()
+
+class account:
+	
+	def __init__(self, bank):
+		synthetic_info = Faker(bank["country"])
+		self._name = bank["name"]
+		self._holder = bank_client(synthetic_info)
+		self._statement = statement(synthetic_info)
+		self._iban = synthetic_info.bban()
+		self._bic = bank["BIC"]
+		generate_pdfs(self._iban, self._holder, self._statement)
+
+
+	def __repr__(self):
+		res = f"\n{Fore.GREEN + 'Bank account ' + Style.RESET_ALL + '-' * 40}\n"
+		res += f"{Fore.YELLOW}Name{Style.RESET_ALL}: {self._name}\n"
+		res += f"{self._holder}\n"
+		res += f"{'-' * 40 + Fore.RED + ' Bank account' + Style.RESET_ALL}"
+		return res

@@ -1,4 +1,3 @@
-import bank_statement as bs
 import json
 from pathlib import Path
 from jinja2 import Environment, FileSystemLoader, select_autoescape
@@ -32,7 +31,7 @@ logger.info("Using config file: %s", CONFIG_PATH)
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-def generate_pdfs():
+def generate_pdfs(iban, holder, statement):
 	# Resolve templates and results dirs relative to the repository root when paths are relative
 	repo_root = CONFIG_PATH.parent.parent
 	template_dir = Path(config.get("input_dir", "templates/html"))
@@ -60,12 +59,11 @@ def generate_pdfs():
 			for template_file in template_files:
 				for i in range(1, iterations + 1):
 					logger.info("Rendering template %s (iteration %d)", template_file.name, i)
-					statement = bs.statement()
-					person = getattr(statement, "_holder", None)
 
 					template = env.get_template(template_file.name)
 					renderer = template.render(
-						person=person,
+						iban=iban,
+						person=holder,
 						transactions=getattr(statement, "_history", []),
 						statement=statement
 					)
@@ -94,7 +92,8 @@ def generate_pdfs():
 			except Exception:
 				logger.exception("Failed to close browser")
 
-if __name__ == "__main__":
-	generate_pdfs()
+
+# if __name__ == "__main__":
+# 	generate_pdfs()
 
 	

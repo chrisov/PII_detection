@@ -1,5 +1,48 @@
 {
 	"input_dir": "templates/html",
 	"output_dir": "pdfs/",
-	"iterations": 10
+	"iterations": 10,
+	"banks": [
+		{	"name": "BankAustria",
+			"country": "de_AT",
+			"BIC": "BKAUATWW"},
+		{	
+			"name": "Barclays",
+			"country": "en_GB",
+			"BIC": "BARCGB22"},
+		{
+			"name": "DeutscheBank",
+			"country": "de_DE",
+			"BIC": "DEUTDEFF"},
+		{
+			"name": "HSBC",
+			"country": "en_GB",
+			"BIC": "HSBCGB2L"},
+		{
+			"name": "N26",
+			"country": "de_DE",
+			"BIC": "NTSBDEB1"},
+		{
+			"name": "RBS",
+			"country": "en_GB",
+			"BIC": "RBOSGB2L"},
+		{
+			"name": "Revolut",
+			"country": "lt_LT",
+			"BIC": "REVOLT21"},
+		{
+			"name": "UniCredit",
+			"country": "it_IT",
+			"BIC": "UNCRITMM"}],
+	"merchants": [
+		"Amazon", "Walmart", "Shell Gas", "Starbucks", "ATM Withdrawal", "GreenLeaf Grocers", "City Central Market", "QuickStop Pharmacy", "Urban Outfitters P-O-S", "The Hardware Hub Ltd.",
+		"Nebula Streaming Service", "CloudCompute Hosting Fee", "ProConnect Software Renewal", "Monthly Mobile Bill - DataCom", "Audible Books Platform",
+		"Bistro Firenze - Lunch", "The Coffee Cart (Tap Payment)", "CityCab Ride Share Service", "Global Airlines Ticket Ref", "Hotel Meridian Reservation",
+		"PowerGrid Electric Co. Payment", "Metro Water Services (EFT)", "SecureHome Insurance Premium", "Monthly Rent Payment - Apt 4B", "Waste Management Fee (Direct Debit)",
+		"ATM Withdrawal - City Branch", "Inter-Bank Transfer (Savings)", "Loan Repayment - Mortgage", "Foreign Exchange Fee - USD", "Payroll Deposit - ACME Corp",
+		"Dr. Anya Sharma (Medical Bill)", "AutoRepair Garage Visit", "Public Transport Pass Top-Up", "Charity Donation - Shelter Fund", "Local Library Overdue Fine"
+	],
+	"incomes": [
+		"ACME Corp Payroll", "Interest Payment", "Transfer from bank_client Services Inc", "Rental Income Deposit", "Retailer Refund"
+	]
 }

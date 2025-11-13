@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barclays Bank Statement</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Define custom colors and font to match the official document look -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'barclays-dark-blue': '#004481',
+                        'barclays-light-blue-bg': '#E9F4FF',
+                        'barclays-medium-blue-border': '#9DD1F1',
+                        'barclays-text-gray': '#52697D',
+                        'barclays-header-gray': '#52697D',
+                    },
+                    fontFamily: {
+                        sans: ['Arial', 'Helvetica', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* General document styling to mimic a printed page */
+        body {
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+            font-family: 'Arial', sans-serif;
+            font-size: 10px; /* Base font size to match document density */
+        }
+        .statement-page {
+            width: 8.5in; /* A4/Letter width approximation */
+            height: 11in; /* A4/Letter height approximation */
+            background-color: white;
+            padding: 0.8in; /* Padding to simulate margins */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        /* Specific styling for the heavy blue lines/borders on the right column */
+        .blue-section-header {
+            border-bottom: 3px solid #004481;
+            padding-bottom: 2px;
+            font-weight: bold;
+            color: #004481;
+            font-size: 11px;
+            margin-bottom: 5px;
+        }
+        .transaction-row > div {
+            min-height: 20px; /* Ensure rows have space */
+        }
+        .transaction-cell {
+            padding-top: 2px;
+            padding-bottom: 2px;
+            border-bottom: 1px dotted #ccc; /* Dotted line separator */
+        }
+    </style>
+</head>
+<body class="font-sans">
+    <div class="statement-page">
+        <!-- 1. TOP HEADER SECTION -->
+        <div class="flex justify-between items-start mb-6">
+            <!-- Left Logo/Bank Name -->
+            <div class="flex items-center space-x-1">
+                <!-- Barclays Logo Simulation -->
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2z" fill="#00A2E2"/>
+                    <path d="M12 2C9.5 2 7.5 3.791 7.5 6h9c0-2.209-2-4-4.5-4z" fill="#004481"/>
+                    <path d="M16.5 6h-9c0 2.209 2 4 4.5 4s4.5-1.791 4.5-4z" fill="#00A2E2"/>
+                </svg>
+                <span class="text-xl font-bold text-barclays-dark-blue tracking-tight">BARCLAYS</span>
+            </div>
+
+            <!-- Right Dates & Bank Info Box -->
+            <div class="text-[9px] text-barclays-text-gray w-[160px]">
+                <div class="bg-barclays-light-blue-bg p-1 border-y border-barclays-medium-blue-border">
+                    <div class="text-black font-semibold">Barclays Bank Account</div>
+                </div>
+                <div class="py-1 px-1">
+                    <div class="flex justify-between">
+                        <span>Statement date</span>
+                        <span class="font-bold">{{ statement._issue_date }}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Last statement</span>
+                        <span class="font-bold">{{ statement._last_statement_date }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. ADDRESS AND MAIN CONTENT GRID -->
+        <div class="grid grid-cols-3 gap-6">
+
+            <!-- LEFT COLUMN: ADDRESS -->
+            <div class="col-span-2 pr-10">
+                <div class="text-[10px] text-barclays-text-gray leading-tight mt-10">
+                    <div class="font-bold mb-1">{{ person._name }}</div>
+                    <div>{{ person._home_address }}</div>
+                </div>
+
+                <!-- YOUR BARCLAYS BANK ACCOUNT STATEMENT TITLE -->
+                <div class="mt-12 text-barclays-dark-blue">
+                    <h1 class="text-xl font-semibold border-b border-barclays-dark-blue pb-1 mb-4">Your Barclays Bank Account statement</h1>
+                </div>
+                
+                <!-- CURRENT ACCOUNT SUMMARY -->
+                <div class="mb-6">
+                    <div class="text-sm font-semibold text-barclays-dark-blue mb-2">Current account statement</div>
+                    <div class="flex items-start text-xs text-barclays-text-gray space-x-2">
+                        <!-- Triangle bullet point simulation -->
+                        <span class="text-xs text-barclays-dark-blue mt-1">▶</span>
+                        <p>Add your choice of Packs to shape your current account around you in the Features Store you'll find a range of Packs to protect your home, gadgets, and to cover you when travelling, available for a monthly fee. Simply add what you need to your existing current account and leave out what you don't. Find out more further on in this statement.</p>
+                    </div>
+                </div>
+
+                <!-- TRANSACTION SECTION -->
+                <div class="text-sm font-semibold text-barclays-dark-blue mb-2">Your transactions</div>
+                <div class="flex text-barclays-text-gray space-x-2 text-[10px] mb-3">
+                    <span class="font-bold">STO</span> Standing Order
+                    <span class="font-bold">ATM</span> Cash Machine
+                    <span class="font-bold"></span> Contactless
+                    <span class="font-bold">SD</span> Direct Debit
+                </div>
+
+                <!-- TRANSACTION TABLE HEADER -->
+                <div class="flex font-bold text-[10px] bg-barclays-light-blue-bg border-y border-barclays-medium-blue-border py-1">
+                    <div class="w-1/6 pl-2">Date</div>
+                    <div class="w-[30%]">Description</div>
+                    <div class="w-[15%] text-right pr-2">Money out</div>
+                    <div class="w-[15%] text-right pr-2">Money in</div>
+                    <div class="w-1/5 text-right pr-2">Balance</div>
+                </div>
+
+                <!-- TRANSACTION ROWS -->
+                <div class="text-[10px] text-barclays-text-gray">
+                    <!-- Row: Start balance -->
+                    <div class="flex transaction-row font-bold text-black border-b border-barclays-medium-blue-border py-1">
+                        <div class="w-1/6 pl-2">10 Nov</div>
+                        <div class="w-[30%]">Start balance</div>
+                        <div class="w-[15%] text-right pr-2"></div>
+                        <div class="w-[15%] text-right pr-2"></div>
+                        <div class="w-1/5 text-right pr-2">370.02</div>
+                    </div>
+
+                    <!-- Row 1: Bill Payment -->
+                    <div class="flex transaction-row">
+                        <div class="w-1/6 pl-2 transaction-cell">13 Nov</div>
+                        <div class="w-[30%] transaction-cell">
+                            Bill payment to MBNA
+                            <div class="text-[9px]">Ref. 3773111021814490</div>
+                        </div>
+                        <div class="w-[15%] text-right pr-2 transaction-cell">50.00</div>
+                        <div class="w-[15%] text-right pr-2 transaction-cell"></div>
+                        <div class="w-1/5 text-right pr-2 transaction-cell">320.02</div>
+                    </div>
+
+                    <!-- Row 2: Bill Payment (Nested 1) -->
+                    <div class="flex transaction-row">
+                        <div class="w-1/6 pl-2 transaction-cell"></div>
+                        <div class="w-[30%] transaction-cell">
+                            Bill payment to Juliette Nicholson
+                            <div class="text-[9px]">Ref. D89828</div>
+                        </div>
+                        <div class="w-[15%] text-right pr-2 transaction-cell">94.00</div>
+                        <div class="w-[15%] text-right pr-2 transaction-cell"></div>
+                        <div class="w-1/5 text-right pr-2 transaction-cell">226.02</div>
+                    </div>
+
+                    <!-- Row 3: Bill Payment (Nested 2) -->
+                    <div class="flex transaction-row">
+                        <div class="w-1/6 pl-2 transaction-cell"></div>
+                        <div class="w-[30%] transaction-cell">
+                            Bill payment to Jessica Paterson
+                            <div class="text-[9px]">Ref. TRAIN MAYBE</div>
+                        </div>
+                        <div class="w-[15%] text-right pr-2 transaction-cell">100.00</div>
+                        <div class="w-[15%] text-right pr-2 transaction-cell"></div>
+                        <div class="w-1/5 text-right pr-2 transaction-cell">126.02</div>
+                    </div>
+
+                    <!-- Row 4: Transfer In (Money In) -->
+                    <div class="flex transaction-row font-bold text-black">
+                        <div class="w-1/6 pl-2 transaction-cell"></div>
+                        <div class="w-[30%] transaction-cell">
+                            Transfer from Sort Code 20-36-16
+                            <div class="text-[9px] font-normal text-barclays-text-gray">Account 56789045</div>
+                        </div>
+                        <div class="w-[15%] text-right pr-2 transaction-cell"></div>
+                        <div class="w-[15%] text-right pr-2 transaction-cell">800.00</div>
+                        <div class="w-1/5 text-right pr-2 transaction-cell">926.02</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT COLUMN: SUMMARY & NOTICES -->
+            <div class="col-span-1 pl-4 text-[10px]">
+                
+                <!-- Account Details -->
+                <div class="text-[9px] text-barclays-text-gray mb-6">
+                    <div class="font-bold text-barclays-dark-blue mb-2">Barclays Bank Account</div>
+                    <div>10 Nov - 07 Dec 2012</div>
+                    <div class="mt-2">Miss Margaret Laing</div>
+                    <div class="flex justify-between mt-1">
+                        <span>• Sort Code</span>
+                        <span class="font-bold">20-36-16</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>• Account no.</span>
+                        <span class="font-bold">10534978</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>• BIC</span>
+                        <span class="font-bold">BARCGB22</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>• IBAN GBS BARC</span>
+                        <span class="font-bold">2036 1610 5349 78</span>
+                    </div>
+                </div>
+
+                <!-- AT A GLANCE SECTION -->
+                <div class="bg-barclays-light-blue-bg border border-barclays-medium-blue-border p-2 mb-6">
+                    <div class="blue-section-header">At a glance</div>
+                    <table class="w-full text-[10px] text-barclays-text-gray">
+                        <tr>
+                            <td class="pb-1">Start balance</td>
+                            <td class="text-right font-bold text-black border-b border-barclays-medium-blue-border">£370.02</td>
+                        </tr>
+                        <tr>
+                            <td class="pt-1">Money in</td>
+                            <td class="text-right font-bold text-black">£2,200.00</td>
+                        </tr>
+                        <tr>
+                            <td class="pb-1">Money out</td>
+                            <td class="text-right font-bold text-black border-b border-barclays-medium-blue-border">£2,334.74</td>
+                        </tr>
+                        <tr>
+                            <td class="pt-1 font-bold text-barclays-dark-blue">End balance</td>
+                            <td class="text-right font-bold text-barclays-dark-blue">£235.28</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <!-- AGREED LIMITS SECTION -->
+                <div class="bg-barclays-light-blue-bg border border-barclays-medium-blue-border p-2 mb-6">
+                    <div class="blue-section-header">Your agreed limits</div>
+                    <table class="w-full text-[10px] text-barclays-text-gray">
+                        <tr>
+                            <td>Overdraft limit</td>
+                            <td class="text-right font-bold text-black">£2,000</td>
+                        </tr>
+                        <tr>
+                            <td>Reserve</td>
+                            <td class="text-right font-bold text-black">£1,000</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <!-- NOTICEBOARD SECTION -->
+                <div class="bg-barclays-light-blue-bg border border-barclays-medium-blue-border p-2">
+                    <div class="blue-section-header">Noticeboard</div>
+                    <p class="text-black font-bold mb-2">The fee for withdrawing cash abroad is changing</p>
+                    <p class="mb-3 text-[9px] leading-snug">
+                        With effect from 1 Jan 2013 the Non-Sterling Cash Fee for using your debit card abroad or to withdraw cash will be <span class="font-bold">£1.50</span> for each applicable transaction regardless of the amount withdrawn. Until 31 Dec 2012 the fee is 2% - min £1.50, max £4.50.
+                    </p>
+                    <p class="mb-3 text-[9px] leading-snug">
+                        Please see the back of your statement to find out when the fee applies and for more information about using your debit card abroad. For details of our Global Alliance partners go to barclays.co.uk/globalalliance
+                    </p>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="mt-8 pt-2 border-t border-gray-300 text-[8px] flex justify-between text-barclays-text-gray">
+            <div class="w-2/3">
+                Barclays Bank PLC. Reg. No. 1026167. Registered in England. Reg. Office: 1 Churchill Place, London E14 5HP
+            </div>
+            <div class="text-right w-1/3">
+                548
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>

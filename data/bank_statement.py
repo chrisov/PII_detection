@@ -1,13 +1,11 @@
 import calendar as cal
 import random as rd
-import account_holder as holder
 import colorama
-import logging
-from faker import Faker
+import json
 from datetime import date
 from tabulate import tabulate
+from pathlib import Path
 
-fake = Faker()
 colorama.init()
 
 merchants = ['Amazon', 'Walmart', 'Shell Gas', 'Starbucks', 'ATM Withdrawal', 'GreenLeaf Grocers', 'City Central Market', 'QuickStop Pharmacy', 'Urban Outfitters P-O-S', 'The Hardware Hub Ltd.',			'Nebula Streaming Service', 'CloudCompute Hosting Fee', 'ProConnect Software Renewal', 'Monthly Mobile Bill - DataCom', 'Audible Books Platform', 
@@ -16,25 +14,33 @@ merchants = ['Amazon', 'Walmart', 'Shell Gas', 'Starbucks', 'ATM Withdrawal', 'G
 			'ATM Withdrawal - City Branch', 'Inter-Bank Transfer (Savings)', 'Loan Repayment - Mortgage', 'Foreign Exchange Fee - USD', 'Dr. Anya Sharma (Medical Bill)',
 			'AutoRepair Garage Visit', 'Public Transport Pass Top-Up', 'Charity Donation - Shelter Fund', 'Local Library Overdue Fine']
 
-incomes = ['ACME Corp Payroll', 'Interest Payment', 'Transfer from Client Services Inc', 'Rental Income Deposit', 'Retailer Refund']
+incomes = ['ACME Corp Payroll', 'Interest Payment', 'Transfer from bank_client Services Inc', 'Rental Income Deposit', 'Retailer Refund']
+
+try:
+	_cfg_path = Path(__file__).resolve().parent / "config" / "config.json"
+	if _cfg_path.exists():
+		with open(_cfg_path, "r", encoding="utf-8") as _f:
+			_cfg = json.load(_f)
+			merchants = _cfg.get('merchants', merchants)
+			incomes = _cfg.get('incomes', incomes)
+except Exception:
+	pass
 
 class statement:
 
-	def __init__(self):
-		logging.basicConfig(level=logging.INFO)
-		logger = logging.getLogger(__name__)
-		logger.info(" Generating the statement instance")
-		self._holder = holder.account_holder()
+	def __init__(self, synthetic_info):
 		self._month = rd.randint(1, 12)
 		self._year = rd.randint(2015, 2025)
 		self._issue_date = date(self._year, self._month, cal.monthrange(self._year, self._month)[1]).strftime("%d %b %Y")
 		self._balance = round(rd.uniform(3000, 10000), 2)
-		self._history = self.generate_transactions()
+		self._history = self.generate_transactions(synthetic_info)
+		self._previous_issue_date = self._history["date"][0] - 1
+		self.last_statement_date = self._history["date"][-1]
 		self.calculate_balances()
 
 
 
-	def generate_debit(self, num_transactions=rd.randint(10, 25)):
+	def generate_debit(self, synthetic_info, num_transactions=rd.randint(7, 13)):
 		"""
 		Generates a list of debit transactions for a person, with the following attributes:
 		date, merchant, amount, account, type.
@@ -48,7 +54,7 @@ class statement:
 		transactions = []
 		for _ in range(num_transactions):
 			transactions.append({
-				"date": fake.date_between(
+				"date": synthetic_info.date_between(
 					start_date=date(self._year, self._month, 1),
 					end_date=date(self._year, self._month, cal.monthrange(self._year, self._month)[1])),
 				"merchant": rd.choice(merchants),
@@ -58,7 +64,7 @@ class statement:
 
 
 
-	def	generate_credit(self, num_transactions=rd.randint(1, 4)):
+	def	generate_credit(self, synthetic_info, num_transactions=rd.randint(1, 4)):
 		"""
 		Generates a list of credit transactions for a person, with the following attributes:
 		date, merchant, amount, account, type.
@@ -71,7 +77,7 @@ class statement:
 		transactions = []
 		for i in range(1, num_transactions):
 			transactions.append({
-				"date": fake.date_between(
+				"date": synthetic_info.date_between(
 					start_date=date(self._year, self._month, 1),
 					end_date=date(self._year, self._month, cal.monthrange(self._year, self._month)[1])),
 				"merchant": incomes[i],
@@ -81,7 +87,7 @@ class statement:
 
 
 
-	def generate_transactions(self):
+	def generate_transactions(self, synthetic_info):
 		"""
 		Generates a list of transactions for a person, with the following attributes:
 		date, merchant, amount, account, type.
@@ -96,8 +102,8 @@ class statement:
 			"debit": "",
 			"balance": self._balance,
 			}
-		debits = self.generate_debit()
-		credits = self.generate_credit()
+		debits = self.generate_debit(synthetic_info)
+		credits = self.generate_credit(synthetic_info)
 		salary = [{
 			"date": date(self._year, self._month, 1),
 			"merchant": incomes[0],
@@ -161,7 +167,6 @@ class statement:
 
 	def __repr__(self):
 		res = f"{colorama.Fore.GREEN}Bank Statement {colorama.Style.RESET_ALL}{'-' * 45}\n"
-		res += f"{self._holder}\n"
 		res += f"{colorama.Fore.YELLOW}Issue date{colorama.Style.RESET_ALL}: {self._issue_date}\n"
 		res += f"{colorama.Fore.YELLOW}Init balance{colorama.Style.RESET_ALL}: {self._balance}\n"
 		res += tabulate(self._history, headers="keys", tablefmt="pretty") + "\n"
