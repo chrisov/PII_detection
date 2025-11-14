@@ -31,7 +31,7 @@ logger.info("Using config file: %s", CONFIG_PATH)
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-def generate_pdfs(iban, holder, statement):
+def generate_pdfs(account):
 	# Resolve templates and results dirs relative to the repository root when paths are relative
 	repo_root = CONFIG_PATH.parent.parent
 	template_dir = Path(config.get("input_dir", "templates/html"))
@@ -62,10 +62,11 @@ def generate_pdfs(iban, holder, statement):
 
 					template = env.get_template(template_file.name)
 					renderer = template.render(
-						iban=iban,
-						person=holder,
-						transactions=getattr(statement, "_history", []),
-						statement=statement
+						iban=account._iban,
+						bic=account._bic,
+						person=account._holder,
+						transactions=getattr(account._statement, "_history", []),
+						statement=account._statement
 					)
 
 					# write each template's outputs under a single directory named after

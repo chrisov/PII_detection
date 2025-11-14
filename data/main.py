@@ -1,6 +1,8 @@
 # Synthetic data generation pipeline entry point
 import json
 from account import account
+from synthetic_gen import generate_pdfs
+
 
 CONFIG_PATH = "config/config.json"
 try:
@@ -13,9 +15,8 @@ if __name__ == "__main__":
 	accounts = []
 	# for bank in config["banks"]:
 	# 	accounts.append(account(bank))
-	
 	accounts.append(account(config["banks"][0]))
-	# accounts.append(account(config["banks"][1]))
-
-	for acc in accounts:	
+	
+	for acc in accounts:
+		generate_pdfs(acc)
 		print(acc)

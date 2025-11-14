@@ -140,60 +140,29 @@
                 <div class="text-[10px] text-barclays-text-gray">
                     <!-- Row: Start balance -->
                     <div class="flex transaction-row font-bold text-black border-b border-barclays-medium-blue-border py-1">
-                        <div class="w-1/6 pl-2">10 Nov</div>
+                        <div class="w-1/6 pl-2">{{ statement._issue_date }}</div>
                         <div class="w-[30%]">Start balance</div>
                         <div class="w-[15%] text-right pr-2"></div>
                         <div class="w-[15%] text-right pr-2"></div>
-                        <div class="w-1/5 text-right pr-2">370.02</div>
-                    </div>
-
-                    <!-- Row 1: Bill Payment -->
-                    <div class="flex transaction-row">
-                        <div class="w-1/6 pl-2 transaction-cell">13 Nov</div>
-                        <div class="w-[30%] transaction-cell">
-                            Bill payment to MBNA
-                            <div class="text-[9px]">Ref. 3773111021814490</div>
-                        </div>
-                        <div class="w-[15%] text-right pr-2 transaction-cell">50.00</div>
-                        <div class="w-[15%] text-right pr-2 transaction-cell"></div>
-                        <div class="w-1/5 text-right pr-2 transaction-cell">320.02</div>
-                    </div>
-
-                    <!-- Row 2: Bill Payment (Nested 1) -->
-                    <div class="flex transaction-row">
-                        <div class="w-1/6 pl-2 transaction-cell"></div>
-                        <div class="w-[30%] transaction-cell">
-                            Bill payment to Juliette Nicholson
-                            <div class="text-[9px]">Ref. D89828</div>
-                        </div>
-                        <div class="w-[15%] text-right pr-2 transaction-cell">94.00</div>
-                        <div class="w-[15%] text-right pr-2 transaction-cell"></div>
-                        <div class="w-1/5 text-right pr-2 transaction-cell">226.02</div>
+                        <div class="w-1/5 text-right pr-2">{{ statement._balance }}</div>
                     </div>
 
                     <!-- Row 3: Bill Payment (Nested 2) -->
+				    {% for t in transactions[1:] %}
                     <div class="flex transaction-row">
                         <div class="w-1/6 pl-2 transaction-cell"></div>
                         <div class="w-[30%] transaction-cell">
-                            Bill payment to Jessica Paterson
-                            <div class="text-[9px]">Ref. TRAIN MAYBE</div>
+                            {% if t.debit == None %}
+                                Bill payment to {{ t.merchant }}
+                            {% else %}
+                                Bank Transfer from {{ t.merchant }}
+                            {% endif %}
                         </div>
-                        <div class="w-[15%] text-right pr-2 transaction-cell">100.00</div>
-                        <div class="w-[15%] text-right pr-2 transaction-cell"></div>
-                        <div class="w-1/5 text-right pr-2 transaction-cell">126.02</div>
+                        <div class="w-[15%] text-right pr-2 transaction-cell">{{ t.debit }}</div>
+                        <div class="w-[15%] text-right pr-2 transaction-cell">{{ t.credit }}</div>
+                        <div class="w-1/5 text-right pr-2 transaction-cell">{{ t.balance }}</div>
                     </div>
-
-                    <!-- Row 4: Transfer In (Money In) -->
-                    <div class="flex transaction-row font-bold text-black">
-                        <div class="w-1/6 pl-2 transaction-cell"></div>
-                        <div class="w-[30%] transaction-cell">
-                            Transfer from Sort Code 20-36-16
-                            <div class="text-[9px] font-normal text-barclays-text-gray">Account 56789045</div>
-                        </div>
-                        <div class="w-[15%] text-right pr-2 transaction-cell"></div>
-                        <div class="w-[15%] text-right pr-2 transaction-cell">800.00</div>
-                        <div class="w-1/5 text-right pr-2 transaction-cell">926.02</div>
-                    </div>
+				    {% endfor %}
                 </div>
             </div>
 
@@ -203,8 +172,8 @@
                 <!-- Account Details -->
                 <div class="text-[9px] text-barclays-text-gray mb-6">
                     <div class="font-bold text-barclays-dark-blue mb-2">Barclays Bank Account</div>
-                    <div>10 Nov - 07 Dec 2012</div>
-                    <div class="mt-2">Miss Margaret Laing</div>
+                    <div>{{ statement._issue_date }} - {{ statement._last_statement_date}}</div>
+                    <div class="mt-2">{{ person._name }}</div>
                     <div class="flex justify-between mt-1">
                         <span>• Sort Code</span>
                         <span class="font-bold">20-36-16</span>
@@ -215,11 +184,11 @@
                     </div>
                     <div class="flex justify-between">
                         <span>• BIC</span>
-                        <span class="font-bold">BARCGB22</span>
+                        <span class="font-bold">{{ bic }}</span>
                     </div>
                     <div class="flex justify-between">
-                        <span>• IBAN GBS BARC</span>
-                        <span class="font-bold">2036 1610 5349 78</span>
+                        <span>• IBAN</span>
+                        <span class="font-bold">{{ iban }}</span>
                     </div>
                 </div>
 
@@ -229,19 +198,19 @@
                     <table class="w-full text-[10px] text-barclays-text-gray">
                         <tr>
                             <td class="pb-1">Start balance</td>
-                            <td class="text-right font-bold text-black border-b border-barclays-medium-blue-border">£370.02</td>
+                            <td class="text-right font-bold text-black border-b border-barclays-medium-blue-border">£{{ statement._balance }}</td>
                         </tr>
                         <tr>
                             <td class="pt-1">Money in</td>
-                            <td class="text-right font-bold text-black">£2,200.00</td>
+                            <td class="text-right font-bold text-black">£{{ statement.calculate_total_credits() }}</td>
                         </tr>
                         <tr>
                             <td class="pb-1">Money out</td>
-                            <td class="text-right font-bold text-black border-b border-barclays-medium-blue-border">£2,334.74</td>
+                            <td class="text-right font-bold text-black border-b border-barclays-medium-blue-border">£{{ statement.calculate_total_debits() }}</td>
                         </tr>
                         <tr>
                             <td class="pt-1 font-bold text-barclays-dark-blue">End balance</td>
-                            <td class="text-right font-bold text-barclays-dark-blue">£235.28</td>
+                            <td class="text-right font-bold text-barclays-dark-blue">£{{ statement._history[-1]['balance'] }}</td>
                         </tr>
                     </table>
                 </div>

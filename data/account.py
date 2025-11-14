@@ -15,12 +15,13 @@ class account:
 		self._statement = statement(synthetic_info)
 		self._iban = synthetic_info.bban()
 		self._bic = bank["BIC"]
-		generate_pdfs(self._iban, self._holder, self._statement)
 
 
 	def __repr__(self):
 		res = f"\n{Fore.GREEN + 'Bank account ' + Style.RESET_ALL + '-' * 40}\n"
 		res += f"{Fore.YELLOW}Name{Style.RESET_ALL}: {self._name}\n"
+		res += f"{Fore.YELLOW}BIC SWIFT{Style.RESET_ALL}: {self._bic}\n"
+		res += f"{Fore.YELLOW}Iban{Style.RESET_ALL}: {self._iban}\n"
 		res += f"{self._holder}\n"
 		res += f"{'-' * 40 + Fore.RED + ' Bank account' + Style.RESET_ALL}"
 		return res

@@ -2,7 +2,7 @@ import calendar as cal
 import random as rd
 import colorama
 import json
-from datetime import date
+from datetime import date, timedelta, datetime
 from tabulate import tabulate
 from pathlib import Path
 
@@ -34,13 +34,13 @@ class statement:
 		self._issue_date = date(self._year, self._month, cal.monthrange(self._year, self._month)[1]).strftime("%d %b %Y")
 		self._balance = round(rd.uniform(3000, 10000), 2)
 		self._history = self.generate_transactions(synthetic_info)
-		self._previous_issue_date = self._history["date"][0] - 1
-		self.last_statement_date = self._history["date"][-1]
+		self._previous_date = (datetime.strptime(self._history[0]["date"], "%d %b %Y") - timedelta(days=1)).strftime("%d %b %Y")
+		self._last_statement_date = self._history[-1]["date"]
 		self.calculate_balances()
 
 
 
-	def generate_debit(self, synthetic_info, num_transactions=rd.randint(7, 13)):
+	def generate_debit(self, synthetic_info, num_transactions=rd.randint(5, 10)):
 		"""
 		Generates a list of debit transactions for a person, with the following attributes:
 		date, merchant, amount, account, type.
