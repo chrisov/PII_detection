@@ -2,7 +2,6 @@ import json
 from pathlib import Path
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from playwright.sync_api import sync_playwright
-import logging
 
 # Resolve config path - try a few common locations (repo root ./config and ./data/config)
 candidate_paths = [
@@ -25,13 +24,7 @@ if CONFIG_PATH is None:
 with open(CONFIG_PATH) as f:
 	config = json.load(f)
 
-logger = logging.getLogger(__name__)
-logger.info("Using config file: %s", CONFIG_PATH)
-
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
-
-def generate_pdfs(account):
+def generate_pdfs(account, i):
 	# Resolve templates and results dirs relative to the repository root when paths are relative
 	repo_root = CONFIG_PATH.parent.parent
 	template_dir = Path(config.get("input_dir", "templates/html"))
@@ -57,41 +50,37 @@ def generate_pdfs(account):
 		page = browser.new_page()
 		try:
 			for template_file in template_files:
-				for i in range(1, iterations + 1):
-					logger.info("Rendering template %s (iteration %d)", template_file.name, i)
+				template = env.get_template(template_file.name)
+				renderer = template.render(
+					iban=account._iban,
+					bic=account._bic,
+					person=account._holder,
+					transactions=getattr(account._statement, "_history", []),
+					statement=account._statement
+				)
 
-					template = env.get_template(template_file.name)
-					renderer = template.render(
-						iban=account._iban,
-						bic=account._bic,
-						person=account._holder,
-						transactions=getattr(account._statement, "_history", []),
-						statement=account._statement
-					)
+				# write each template's outputs under a single directory named after
+				# the template (avoid mutating the base output dir across iterations)
+				template_output_dir = base_output_dir / template_file.stem
+				template_output_dir.mkdir(parents=True, exist_ok=True)
+				name = template_output_dir / f"{template_file.stem}_{i}.html"
+				with open(name, "w", encoding="utf-8") as f:
+					f.write(renderer)
 
-					# write each template's outputs under a single directory named after
-					# the template (avoid mutating the base output dir across iterations)
-					template_output_dir = base_output_dir / template_file.stem
-					template_output_dir.mkdir(parents=True, exist_ok=True)
-					name = template_output_dir / f"{template_file.stem}_{i}.html"
-					with open(name, "w", encoding="utf-8") as f:
-						f.write(renderer)
-
-					pdf_file = name.with_suffix(".pdf")
-					# Use file:// URI and wait for network idle to ensure assets are loaded
-					page.goto(name.resolve().as_uri(), wait_until="networkidle", timeout=30_000)
-					page.pdf(path=str(pdf_file), format="A4", print_background=True)
-					# Remove the intermediate HTML file now that the PDF has been created
-					try:
-						name.unlink()
-						logger.info("Removed intermediate HTML %s", name)
-					except Exception:
-						logger.exception("Failed to remove intermediate HTML %s", name)
+				pdf_file = name.with_suffix(".pdf")
+				# Use file:// URI and wait for network idle to ensure assets are loaded
+				page.goto(name.resolve().as_uri(), wait_until="networkidle", timeout=30_000)
+				page.pdf(path=str(pdf_file), format="A4", print_background=True)
+				# Remove the intermediate HTML file now that the PDF has been created
+				try:
+					name.unlink()
+				except Exception:
+					raise FileNotFoundError("Failed to remove intermediate HTML %s", name)
 		finally:
 			try:
 				browser.close()
 			except Exception:
-				logger.exception("Failed to close browser")
+				raise KeyError("Failed to close browser")
 
 
 # if __name__ == "__main__":

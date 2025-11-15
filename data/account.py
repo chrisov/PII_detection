@@ -24,4 +24,5 @@ class account:
 		res += f"{Fore.YELLOW}Iban{Style.RESET_ALL}: {self._iban}\n"
 		res += f"{self._holder}\n"
 		res += f"{'-' * 40 + Fore.RED + ' Bank account' + Style.RESET_ALL}"
+		
 		return res

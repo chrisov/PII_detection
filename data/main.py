@@ -15,8 +15,10 @@ if __name__ == "__main__":
 	accounts = []
 	# for bank in config["banks"]:
 	# 	accounts.append(account(bank))
-	accounts.append(account(config["banks"][0]))
+	for i in range(config["iterations"]):
+		accounts.append(account(config["banks"][1]))
 	
-	for acc in accounts:
-		generate_pdfs(acc)
+	for i, acc in enumerate(accounts):
+		generate_pdfs(acc, i + 1)
 		print(acc)
+		print(acc._statement)

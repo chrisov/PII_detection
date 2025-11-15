@@ -152,7 +152,7 @@
                     <div class="flex transaction-row">
                         <div class="w-1/6 pl-2 transaction-cell"></div>
                         <div class="w-[30%] transaction-cell">
-                            {% if t.debit == None %}
+                            {% if not t.credit %}
                                 Bill payment to {{ t.merchant }}
                             {% else %}
                                 Bank Transfer from {{ t.merchant }}
