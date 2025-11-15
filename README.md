@@ -1,6 +1,9 @@
 <a name="top"></a>
 
-<br>
+<div align="center">
+  <img src="https://raw.githubusercontent.com/chrisov/PII_detection/resources/Logo.png" width="400" alt="Logo"/>
+</div>
+
 <div align="center">
 
 ### 🛠 Python (NumPy, Pandas)
