@@ -1,7 +1,7 @@
 <a name="top"></a>
 
 <div align="center">
-  <img src="https://raw.githubusercontent.com/chrisov/PII_detection/resources/Logo.png" width="400" alt="Logo"/>
+  <img src="https://raw.githubusercontent.com/chrisov/PII_detection/resources/unnamed.png" width="500" alt="Logo"/>
 </div>
 
 <div align="center">
