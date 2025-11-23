@@ -3,7 +3,7 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 from playwright.sync_api import sync_playwright
 
 
-def generatePDFs(account, i, config):
+def generate_pdfs(account, i, config):
 
 	template_dir = _Path(config.get("INPUT_DIR", "samples/html"))
 	if not template_dir.is_absolute():
@@ -57,9 +57,5 @@ def generatePDFs(account, i, config):
 				browser.close()
 			except Exception:
 				raise KeyError("Failed to close browser")
-
-
-# if __name__ == "__main__":
-# 	generate_pdfs()
 
 	

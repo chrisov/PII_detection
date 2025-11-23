@@ -1,4 +1,5 @@
 {
 	"DATA_DIR": "data/",
-	"TRAINING_DIR": "training/"
+	"TRAINING_DIR": "training/",
+	"LOG_FILE": "tests/dataset.log"
 }
