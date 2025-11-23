@@ -1,40 +1,49 @@
 {
-	"input_dir": "templates/html",
-	"output_dir": "pdfs/",
-	"iterations": 10,
-	"banks": [
-		{	"name": "BankAustria",
-			"country": "de_AT",
-			"BIC": "BKAUATWW"},
-		{	
+	"INPUT_DIR": "data/samples/html",
+	"OUTPUT_DIR": "data/synthetic/",
+	"ITERATIONS": 3,
+	"BANKS": [{
+			"name": "BankAustria",
+			"origin": "de_AT",
+			"BIC": "BKAUATWW",
+			"isReadyToRender": true
+		}, {	
 			"name": "Barclays",
-			"country": "en_GB",
-			"BIC": "BARCGB22"},
-		{
+			"origin": "en_GB",
+			"BIC": "BARCGB22",
+			"isReadyToRender": true
+		}, {
 			"name": "DeutscheBank",
-			"country": "de_DE",
-			"BIC": "DEUTDEFF"},
-		{
+			"origin": "de_DE",
+			"BIC": "DEUTDEFF",
+			"isReadyToRender": false
+		}, {
 			"name": "HSBC",
-			"country": "en_GB",
-			"BIC": "HSBCGB2L"},
-		{
+			"origin": "en_GB",
+			"BIC": "HSBCGB2L",
+			"isReadyToRender": false
+		}, {
 			"name": "N26",
-			"country": "de_DE",
-			"BIC": "NTSBDEB1"},
-		{
+			"origin": "de_DE",
+			"BIC": "NTSBDEB1",
+			"isReadyToRender": false
+		}, {
 			"name": "RBS",
-			"country": "en_GB",
-			"BIC": "RBOSGB2L"},
-		{
+			"origin": "en_GB",
+			"BIC": "RBOSGB2L",
+			"isReadyToRender": false
+		}, {
 			"name": "Revolut",
-			"country": "lt_LT",
-			"BIC": "REVOLT21"},
-		{
+			"origin": "lt_LT",
+			"BIC": "REVOLT21",
+			"isReadyToRender": false
+		}, {
 			"name": "UniCredit",
-			"country": "it_IT",
-			"BIC": "UNCRITMM"}],
-	"merchants": [
+			"origin": "it_IT",
+			"BIC": "UNCRITMM",
+			"isReadyToRender": false
+		}],
+	"MERCHANTS": [
 		"Amazon", "Walmart", "Shell Gas", "Starbucks", "ATM Withdrawal", "GreenLeaf Grocers", "City Central Market", "QuickStop Pharmacy", "Urban Outfitters P-O-S", "The Hardware Hub Ltd.",
 		"Nebula Streaming Service", "CloudCompute Hosting Fee", "ProConnect Software Renewal", "Monthly Mobile Bill - DataCom", "Audible Books Platform",
 		"Bistro Firenze - Lunch", "The Coffee Cart (Tap Payment)", "CityCab Ride Share Service", "Global Airlines Ticket Ref", "Hotel Meridian Reservation",
@@ -42,7 +51,7 @@
 		"ATM Withdrawal - City Branch", "Inter-Bank Transfer (Savings)", "Loan Repayment - Mortgage", "Foreign Exchange Fee - USD", "Payroll Deposit - ACME Corp",
 		"Dr. Anya Sharma (Medical Bill)", "AutoRepair Garage Visit", "Public Transport Pass Top-Up", "Charity Donation - Shelter Fund", "Local Library Overdue Fine"
 	],
-	"incomes": [
+	"INCOMES": [
 		"ACME Corp Payroll", "Interest Payment", "Transfer from bank_client Services Inc", "Rental Income Deposit", "Retailer Refund"
 	]
 }

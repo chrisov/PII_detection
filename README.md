@@ -14,15 +14,23 @@
 
 # Financial Services Document Compliance
 
-## 1. Introduction
+## 1. Getting Started
 
-### 1.1 General
+## 2. Introduction
+
+### 2.1 General
 
 In an era of stringent data protection regulations and increasing cybersecurity threats, the handling of *Personally Identifiable Information* (PII) has become a critical concern for organizations across all sectors. Financial institutions, in particular, process vast quantities of sensitive documents containing PII, from bank statements and loan applications to tax returns and credit reports. Manual redaction of this information is time-consuming, error-prone, and scales poorly as document volumes increase.
 
 This project presents a **cloud-deployed end-to-end machine learning** system for automated detection and redaction of PII in financial documents. By leveraging state-of-the-art *Natural Language Processing* (NLP) techniques, specifically **BERT**-based *Named Entity Recognition* (NER), the system identifies sensitive information with high accuracy, enabling organizations to protect customer privacy while streamlining document processing workflows.
 
-### 1.2 Problem Statement
+<div align="right">
+  <a href="#top">⬆️ Return to top</a>
+</div>
+
+<br>
+
+### 2.2 Problem Statement
 
 Financial services companies face mounting pressure from regulatory frameworks (*PCI-DSS*, *GDPR*, *CCPA*, *SOC2*). A single unredacted PII element in a shared document can result in regulatory violations costing anywhere from $100 to $50,000 per exposed record, plus reputational damage and potential lawsuits. Manual PII redaction presents significant operational challenges, such as  **time-pressure**, **error-proneness**, **non-scalability**, **inconsistency**. Financial institutions routinely need to share documents with *Credit bureaus* and underwriters for loan origination, *external auditors* for compliance reviews, *third-party analytics providers* for risk modeling and more. Each sharing instance requires comprehensive PII removal, creating a bottleneck in business processes. For example:
 
@@ -44,7 +52,7 @@ Financial services companies face mounting pressure from regulatory frameworks (
 
 <br>
 
-## 2. Technical approach
+## 3. Technical approach
 
 The system implements a two-stage machine learning pipeline with human-in-the-loop validation:
 
@@ -78,8 +86,13 @@ Stage 2: Active Learning Enhancement
 	Picture 1: Technical approach per Stage.
 </div>
 
+<div align="right">
+  <a href="#top">⬆️ Return to top</a>
+</div>
 
-### 2.1 Stage 1 (MVP): Continuous Retraining PII Model
+<br>
+
+### 3.1 Stage 1 (MVP): Continuous Retraining PII Model
 
 Every step of Stage 1, as defined in [Picture 1](#pic1), are explained in the following:
 
@@ -107,6 +120,11 @@ Every step of Stage 1, as defined in [Picture 1](#pic1), are explained in the fo
 - <u>**Human Review Queue**</u>: 
 
 - <u>**Redaction Engine**</u>: 
+
+<div align="right">
+  <a href="#top">⬆️ Return to top</a>
+</div>
+
 
 ### Stage 2
 
