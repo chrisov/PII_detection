@@ -11,6 +11,6 @@ except:
 
 if __name__ == "__main__":
 	log_path = _Path(config["LOG_FILE"])
-	if log_path.parent.exists() and log_path.is_file():
+	if log_path.exists() and log_path.is_file():
 		log_path.unlink()
 	synthetic_gen.synthetic_gen(log_path)
