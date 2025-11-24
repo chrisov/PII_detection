@@ -6,6 +6,7 @@ class bank_client:
 	
 	def __init__(self, synthetic_info):
 		self._name = synthetic_info.name()
+		self._gender = synthetic_info.random_element(elements=('Male', 'Female'))
 		self._ssn = synthetic_info.ssn()
 		self._address = synthetic_info.address()
 		self._routing_number = synthetic_info.aba()
@@ -23,8 +24,3 @@ class bank_client:
 		res += f"{colorama.Fore.YELLOW}  Email address{colorama.Style.RESET_ALL}: {self._email}\n"
 		res += f"{'-' * 40 + colorama.Fore.RED + ' Person' + colorama.Style.RESET_ALL}"
 		return res
-
-
-# if __name__ == "__main__":
-# 	person = bank_client()
-# 	print(person)

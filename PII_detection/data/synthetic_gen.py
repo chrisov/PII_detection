@@ -47,5 +47,6 @@ def synthetic_gen(logfile):
 			if not logfile.exists():
 				logfile.parent.mkdir(parents=True, exist_ok=True)
 			logger.info(f"'{acc._name}_{index}' created successfully! ({i + 1}/{total})")
+			print(acc._holder)
 	else:
 		logger.error("Accounts list empty!")
