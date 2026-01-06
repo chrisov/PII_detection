@@ -1,5 +1,7 @@
 {
 	"DATA_DIR": "data/",
+	"INPUT_DIR": "data/samples/html",
+	"OUTPUT_DIR": "data/synthetic",
 	"TRAINING_DIR": "training/",
 	"LOG_FILE": "tests/dataset.log"
 }

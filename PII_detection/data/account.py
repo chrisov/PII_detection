@@ -1,7 +1,7 @@
-from .account_holder import bank_client
-from .bank_statement import statement
 from colorama import init, Fore, Style
 from faker import Faker
+from PII_detection.data.account_holder import bank_client
+from PII_detection.data.bank_statement import statement
 
 init()
 

@@ -1,25 +1,12 @@
 from pathlib import Path as _Path
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from playwright.sync_api import sync_playwright
-
+from PII_detection.config import ensure_directory
 
 def generate_pdfs(account, i, config):
 
-	template_dir = _Path(config.get("INPUT_DIR", "samples/html"))
-	if not template_dir.is_absolute():
-		_this = _Path(__file__).resolve()
-		repo_root = _this.parent.parent
-		template_dir = (repo_root / template_dir).resolve()
-
-	if not template_dir.exists():
-		raised = f"Template directory not found: {template_dir}. Please ensure templates are present or update INPUT_DIR in the config."
-		raise FileNotFoundError(raised)
-
-	output_dir = _Path(config.get("OUTPUT_DIR", "synthetic"))
-	if not output_dir.is_absolute():
-		_this = _Path(__file__).resolve()
-		repo_root = _this.parent.parent
-		output_dir = (repo_root / output_dir).resolve()
+	template_dir = ensure_directory(_Path(config.get("INPUT_DIR", "data/samples/html")))
+	output_dir = ensure_directory(_Path(config.get("OUTPUT_DIR", "data/synthetic")))
 
 	env = Environment(
 		loader=FileSystemLoader(str(template_dir)),
