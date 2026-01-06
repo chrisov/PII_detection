@@ -6,12 +6,12 @@
 			"name": "BankAustria",
 			"origin": "de_AT",
 			"BIC": "BKAUATWW",
-			"isReadyToRender": false
+			"isReadyToRender": true
 		}, {	
 			"name": "Barclays",
 			"origin": "en_GB",
 			"BIC": "BARCGB22",
-			"isReadyToRender": false
+			"isReadyToRender": true
 		}, {
 			"name": "DeutscheBank",
 			"origin": "de_DE",
