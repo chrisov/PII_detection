@@ -226,13 +226,13 @@
             <tr>
                 <td class="col-date">{{ t.date }}</td>
                 <td class="col-details">{{ t.merchant }}</td>
-				{% if not t.debit %}
-	                <td class="col-out">{{ t.credit }}</td>
-                	<td class="col-in"></td>
-				{% else %}
-	                <td class="col-out"></td>
-                	<td class="col-in">{{ t.debit }}</td>
-				{% endif %}
+                {% if not t.debit %}
+                    <td class="col-out"></td>
+                    <td class="col-in">{{ t.credit }}</td>
+                {% else %}
+                    <td class="col-out">{{ t.debit }}</td>
+                    <td class="col-in"></td>
+                {% endif %}
                 <td class="col-bal">{{ t.balance }}</td>
             </tr>
 			{% endfor %}

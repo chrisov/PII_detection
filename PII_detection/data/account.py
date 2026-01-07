@@ -7,12 +7,12 @@ init()
 
 class account:
 	
-	def __init__(self, bank):
+	def __init__(self, bank, merchants, incomes):
 		synthetic_info = Faker(bank["origin"])
 		self._name = bank["name"]
 		self._bic = bank["BIC"]
 		self._holder = bank_client(synthetic_info)
-		self._statement = statement(synthetic_info)
+		self._statement = statement(synthetic_info, merchants, incomes)
 		self._iban = synthetic_info.bban()
 
 
@@ -26,8 +26,8 @@ class account:
 		return res
 		
 
-def	generateSyntheticBank(bank, iterations) -> list:
+def	generateSyntheticBank(bank, iterations, merchants, incomes) -> list:
 	accounts = []
 	for i in range(iterations):
-		accounts.append(account(bank))
+		accounts.append(account(bank, merchants, incomes))
 	return accounts

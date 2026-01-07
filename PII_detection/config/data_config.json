@@ -1,7 +1,7 @@
 {
 	"INPUT_DIR": "data/samples/html",
 	"OUTPUT_DIR": "data/synthetic/",
-	"ITERATIONS": 1,
+	"ITERATIONS": 4,
 	"BANKS": [{
 			"name": "BankAustria",
 			"origin": "de_AT",

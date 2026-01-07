@@ -20,7 +20,7 @@ def synthetic_gen(logfile, logger):
 	accounts = []
 	for bank in data_config["BANKS"]:
 		if bank["isReadyToRender"]:
-			accounts.extend(generateSyntheticBank(bank, int(data_config["ITERATIONS"])))
+			accounts.extend(generateSyntheticBank(bank, int(data_config["ITERATIONS"]), data_config["MERCHANTS"], data_config["INCOMES"]))
 
 	total = len(accounts)
 	if accounts:

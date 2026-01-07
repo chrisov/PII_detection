@@ -1,39 +1,19 @@
 import calendar as cal
 import random as rd
 import colorama
-import json
 from datetime import date, timedelta, datetime
 from tabulate import tabulate
-from pathlib import Path
 
 colorama.init()
 
-merchants = ['Amazon', 'Walmart', 'Shell Gas', 'Starbucks', 'ATM Withdrawal', 'GreenLeaf Grocers', 'City Central Market', 'QuickStop Pharmacy', 'Urban Outfitters P-O-S', 'The Hardware Hub Ltd.',			'Nebula Streaming Service', 'CloudCompute Hosting Fee', 'ProConnect Software Renewal', 'Monthly Mobile Bill - DataCom', 'Audible Books Platform', 
-			'Bistro Firenze - Lunch', 'The Coffee Cart (Tap Payment)', 'CityCab Ride Share Service', 'Global Airlines Ticket Ref', 'Hotel Meridian Reservation', 
-			'PowerGrid Electric Co. Payment', 'Metro Water Services (EFT)', 'SecureHome Insurance Premium', 'Monthly Rent Payment - Apt 4B', 'Waste Management Fee (Direct Debit)', 
-			'ATM Withdrawal - City Branch', 'Inter-Bank Transfer (Savings)', 'Loan Repayment - Mortgage', 'Foreign Exchange Fee - USD', 'Dr. Anya Sharma (Medical Bill)',
-			'AutoRepair Garage Visit', 'Public Transport Pass Top-Up', 'Charity Donation - Shelter Fund', 'Local Library Overdue Fine']
-
-incomes = ['ACME Corp Payroll', 'Interest Payment', 'Transfer from bank_client Services Inc', 'Rental Income Deposit', 'Retailer Refund']
-
-try:
-	_cfg_path = Path(__file__).resolve().parent / "config" / "config.json"
-	if _cfg_path.exists():
-		with open(_cfg_path, "r", encoding="utf-8") as _f:
-			_cfg = json.load(_f)
-			merchants = _cfg.get('merchants', merchants)
-			incomes = _cfg.get('incomes', incomes)
-except Exception:
-	pass
-
 class statement:
 
-	def __init__(self, synthetic_info):
+	def __init__(self, synthetic_info, merchants, incomes):
 		self._month = rd.randint(1, 12)
 		self._year = rd.randint(2015, 2025)
 		self._issue_date = date(self._year, self._month, cal.monthrange(self._year, self._month)[1]).strftime("%d %b %Y")
 		self._balance = round(rd.uniform(3000, 10000), 2)
-		self._history = self.generate_transactions(synthetic_info)
+		self._history = self.generate_transactions(synthetic_info, merchants, incomes)
 		self._previous_date = (datetime.strptime(self._history[0]["date"], "%d %b %Y") - timedelta(days=1)).strftime("%d %b %Y")
 		self._last_statement_date = self._history[-1]["date"]
 		self.calculate_balances()
@@ -41,7 +21,7 @@ class statement:
 
 
 
-	def generate_debit(self, synthetic_info, num_transactions=rd.randint(5, 10)):
+	def generate_debit(self, synthetic_info, merchants, num_transactions=rd.randint(5, 10)):
 		"""
 		Generates a list of debit transactions for a person, with the following attributes:
 		date, merchant, amount, account, type.
@@ -65,7 +45,7 @@ class statement:
 
 
 
-	def	generate_credit(self, synthetic_info, num_transactions=rd.randint(1, 4)):
+	def	generate_credit(self, synthetic_info, incomes, num_transactions=rd.randint(1, 4)):
 		"""
 		Generates a list of credit transactions for a person, with the following attributes:
 		date, merchant, amount, account, type.
@@ -88,7 +68,7 @@ class statement:
 
 
 
-	def generate_transactions(self, synthetic_info):
+	def generate_transactions(self, synthetic_info, merchants, incomes):
 		"""
 		Generates a list of transactions for a person, with the following attributes:
 		date, merchant, amount, account, type.
@@ -103,8 +83,8 @@ class statement:
 			"debit": "",
 			"balance": self._balance,
 			}
-		debits = self.generate_debit(synthetic_info)
-		credits = self.generate_credit(synthetic_info)
+		debits = self.generate_debit(synthetic_info, merchants)
+		credits = self.generate_credit(synthetic_info, incomes)
 		salary = [{
 			"date": date(self._year, self._month, 1),
 			"merchant": incomes[0],
