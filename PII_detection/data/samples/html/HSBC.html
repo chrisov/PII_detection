@@ -160,9 +160,8 @@
 
     <div class="top-meta">
         <div class="customer-address">
-            Mr John Doe<br>
-            20 Sherwood St,<br>
-            London W1F 7ED
+            {{ "Mr " if person._gender == "Male" else "Mrs " if person._gender == "Female" }}{{ person._name }}<br>
+            {{ person._address.replace('\n', '<br>') | safe }}
             <p style="margin-top: 30px;">|||'|'|''||'|''|''|||||''|||'|'</p>
         </div>
         
@@ -171,21 +170,21 @@
                 <tr><th colspan="2">Account Summary</th></tr>
             </thead>
             <tbody>
-                <tr><td style="text-align: left;">Opening Balance</td><td>0.57</td></tr>
-                <tr><td style="text-align: left;">Payments In</td><td>9,820.00</td></tr>
-                <tr><td style="text-align: left;">Payments Out</td><td>9,803.54</td></tr>
-                <tr><td style="text-align: left;">Closing Balance</td><td><b>17.03</b></td></tr>
+                <tr><td style="text-align: left;">Opening Balance</td><td>{{ statement._balance }}</td></tr>
+                <tr><td style="text-align: left;">Payments In</td><td>{{ statement.calculate_total_credits() }}</td></tr>
+                <tr><td style="text-align: left;">Payments Out</td><td>{{ statement.calculate_total_debits() }}</td></tr>
+                <tr><td style="text-align: left;">Closing Balance</td><td><b>{{ statement._history[-1]['balance'] }}</b></td></tr>
             </tbody>
         </table>
     </div>
 
     <div style="margin-bottom: 30px;">
-        <div style="font-weight: bold; margin-bottom: 20px;">15 October to 14 November 2020</div>
+        <div style="font-weight: bold; margin-bottom: 20px;">{{ transactions[0]["date"] }} to {{ statement._last_statement_date }}</div>
         
         <div class="account-identifiers" style="margin-right: 130px">
             <div>
                 <span class="bold-label">International Bank Account Number</span><br>
-                ABCDHBUK0000001234567894<br>
+                {{ iban }}<br>
                 <span class="bold-label">Branch Identifier Code</span><br>
                 JUBKGB12345F
             </div>
@@ -194,11 +193,11 @@
         <div class="account-identifiers">
             <div style="width: 60%;">
                 <span class="bold-label">Account Name</span><br>
-                Mr John Doe
+                {{ "Mr " if person._gender == "Male" else "Mrs " if person._gender == "Female" }}{{ person._name }}
             </div>
             <div style="width: 40%; display: flex; justify-content: space-between;">
                 <div><span class="bold-label">Sortcode</span><br>40-25-02</div>
-                <div><span class="bold-label">Account Number</span><br>123456979</div>
+                <div><span class="bold-label">Account Number</span><br>{{ iban[-10:] }}</div>
                 <div><span class="bold-label">Sheet Number</span><br>16</div>
             </div>
         </div>
@@ -217,89 +216,26 @@
         </thead>
         <tbody>
             <tr>
-                <td class="col-date"><b>14 Oct 20</b></td>
+                <td class="col-date"><b>{{ transactions[0].date }}</b></td>
                 <td class="col-details"><b>BALANCE BROUGHT FORWARD</b></td>
                 <td class="col-out"></td>
                 <td class="col-in"></td>
-                <td class="col-bal">0.57</td>
+                <td class="col-bal">{{ statement._balance }}</td>
             </tr>
+			{% for t in transactions[1:] %}
             <tr>
-                <td class="col-date">15 Oct 20</td>
-                <td class="col-details">
-                    BP GBCLONLTD<br>
-                    <span class="sub-detail">construction</span>
-                </td>
-                <td class="col-out"></td>
-                <td class="col-in">9,000.00</td>
-                <td class="col-bal"></td>
+                <td class="col-date">{{ t.date }}</td>
+                <td class="col-details">{{ t.merchant }}</td>
+				{% if not t.debit %}
+	                <td class="col-out">{{ t.credit }}</td>
+                	<td class="col-in"></td>
+				{% else %}
+	                <td class="col-out"></td>
+                	<td class="col-in">{{ t.debit }}</td>
+				{% endif %}
+                <td class="col-bal">{{ t.balance }}</td>
             </tr>
-            <tr>
-                <td class="col-date"></td>
-                <td class="col-details">
-                    BP C Florea<br>
-                    <span class="sub-detail">For help</span>
-                </td>
-                <td class="col-out">1,225.00</td>
-                <td class="col-in"></td>
-                <td class="col-bal"></td>
-            </tr>
-            <tr>
-                <td class="col-date"></td>
-                <td class="col-details">
-                    BP Victor Popa<br>
-                    <span class="sub-detail">For my</span>
-                </td>
-                <td class="col-out">1,900.00</td>
-                <td class="col-in"></td>
-                <td class="col-bal">5,875.57</td>
-            </tr>
-            <tr>
-                <td class="col-date">16 Oct 20</td>
-                <td class="col-details">
-                    BP V Diminet<br>
-                    <span class="sub-detail">For help</span>
-                </td>
-                <td class="col-out">1,710.00</td>
-                <td class="col-in"></td>
-                <td class="col-bal"></td>
-            </tr>
-            <tr>
-                <td class="col-date"></td>
-                <td class="col-details">
-                    BP V Birca<br>
-                    <span class="sub-detail">Fie felp</span>
-                </td>
-                <td class="col-out">600.00</td>
-                <td class="col-in"></td>
-                <td class="col-bal"></td>
-            </tr>
-            <tr>
-                <td class="col-date"></td>
-                <td class="col-details">
-                    BP G Grajdean<br>
-                    <span class="sub-detail">For help</span>
-                </td>
-                <td class="col-out">1,000.00</td>
-                <td class="col-in"></td>
-                <td class="col-bal">2,565.57</td>
-            </tr>
-            <tr>
-                <td class="col-date">21 Oct 20</td>
-                <td class="col-details">
-                    BP C Florea<br>
-                    <span class="sub-detail">For rent</span>
-                </td>
-                <td class="col-out">300.00</td>
-                <td class="col-in"></td>
-                <td class="col-bal"></td>
-            </tr>
-            <tr style="border-top: 1px solid #eee;">
-                <td class="col-date"></td>
-                <td class="col-details"><b>BALANCE CARRIED FORWARD</b></td>
-                <td class="col-out"></td>
-                <td class="col-in"></td>
-                <td class="col-bal">590.57</td>
-            </tr>
+			{% endfor %}
         </tbody>
     </table>
 

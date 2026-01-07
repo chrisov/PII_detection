@@ -155,11 +155,11 @@
 					<!-- <td class="pt-1.5 align-top font-normal"></td> -->
 					<td class="pt-1.5 pb-2 align-top transaction-text font-normal">{{ t.merchant }}</td>
 					{% if not t.credit %}
-					<td class="pt-1.5 text-right align-top font-normal">-{{ t.debit }}</td>
-					<td class="pt-1.5 text-right align-top font-normal"></td>
+						<td class="pt-1.5 text-right align-top font-normal">-{{ t.debit }}</td>
+						<td class="pt-1.5 text-right align-top font-normal"></td>
 					{% else %}
-					<td class="pt-1.5 text-right align-top font-normal"></td>
-					<td class="pt-1.5 text-right align-top font-normal">+{{ t.credit }}</td>
+						<td class="pt-1.5 text-right align-top font-normal"></td>
+						<td class="pt-1.5 text-right align-top font-normal">+{{ t.credit }}</td>
 					{% endif %}
 				</tr>
 				{% endfor %}

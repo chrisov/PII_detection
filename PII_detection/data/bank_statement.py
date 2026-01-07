@@ -37,6 +37,7 @@ class statement:
 		self._previous_date = (datetime.strptime(self._history[0]["date"], "%d %b %Y") - timedelta(days=1)).strftime("%d %b %Y")
 		self._last_statement_date = self._history[-1]["date"]
 		self.calculate_balances()
+		print(self)
 
 
 

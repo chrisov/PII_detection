@@ -1,27 +1,27 @@
 {
 	"INPUT_DIR": "data/samples/html",
 	"OUTPUT_DIR": "data/synthetic/",
-	"ITERATIONS": 3,
+	"ITERATIONS": 1,
 	"BANKS": [{
 			"name": "BankAustria",
 			"origin": "de_AT",
 			"BIC": "BKAUATWW",
-			"isReadyToRender": true
+			"isReadyToRender": false
 		}, {	
 			"name": "Barclays",
 			"origin": "en_GB",
 			"BIC": "BARCGB22",
-			"isReadyToRender": true
+			"isReadyToRender": false
 		}, {
 			"name": "DeutscheBank",
 			"origin": "de_DE",
 			"BIC": "DEUTDEFF",
-			"isReadyToRender": true
+			"isReadyToRender": false
 		}, {
 			"name": "HSBC",
 			"origin": "en_GB",
 			"BIC": "HSBCGB2L",
-			"isReadyToRender": false
+			"isReadyToRender": true
 		}, {
 			"name": "N26",
 			"origin": "de_DE",
