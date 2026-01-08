@@ -21,7 +21,7 @@ class statement:
 
 
 
-	def generate_debit(self, synthetic_info, merchants, num_transactions=rd.randint(5, 10)):
+	def generate_debit(self, synthetic_info, merchants, num_transactions=rd.randint(5, 8)):
 		"""
 		Generates a list of debit transactions for a person, with the following attributes:
 		date, merchant, amount, account, type.

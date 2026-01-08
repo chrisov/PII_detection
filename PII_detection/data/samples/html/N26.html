@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        :root {
+            --n26-teal: #356b7d;
+            --n26-light-gray: #f9f9f9;
+            --n26-border: #d1d1d1;
+        }
+
+        body {
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            background-color: #e0e0e0;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+
+        .page {
+            width: 800px;
+            min-height: 1000px;
+            background: white;
+            margin: 0 auto;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        }
+
+        /* Header Bar */
+        .top-accent {
+            height: 25px;
+            background-color: var(--n26-teal);
+            width: 100%;
+        }
+
+        .content {
+            padding: 40px;
+            flex-grow: 1;
+        }
+
+        .logo {
+            margin-bottom: 50px;
+        }
+
+        .logo-text {
+            font-size: 48px;
+            font-weight: bold;
+            letter-spacing: -2px;
+            border-top: 4px solid black;
+            display: inline-block;
+            line-height: 1;
+            padding-top: 5px;
+        }
+
+        /* Header Info */
+        .header-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            margin-bottom: 60px;
+            font-size: 13px;
+        }
+
+        .customer-info {
+            line-height: 1.5;
+        }
+
+        .account-meta table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .account-meta td {
+            padding: 2px 0;
+        }
+
+        .label {
+            width: 160px;
+        }
+
+        /* Account Summary Table */
+        .summary-title {
+            color: var(--n26-teal);
+            font-size: 18px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        .transaction-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 11px;
+        }
+
+        .transaction-table thead th {
+            color: var(--n26-teal);
+            border-bottom: 1px solid var(--n26-teal);
+            padding: 8px 4px;
+            text-align: left;
+            font-weight: bold;
+        }
+
+        .transaction-table td {
+            padding: 6px 4px;
+            border-bottom: 0.5px solid #eee;
+        }
+
+        .day-summary-row td {
+            border-bottom: 1px solid #333;
+            font-weight: bold;
+        }
+
+        .text-right { text-align: right; }
+        .text-center { text-align: center; }
+
+        /* Total Footer */
+        .total-bar {
+            background-color: var(--n26-teal);
+            color: white;
+            padding: 8px 15px;
+            display: flex;
+            justify-content: flex-end;
+            font-weight: bold;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        .total-label { margin-right: 80px; }
+
+        /* Page Footer */
+        .footer {
+            background-color: var(--n26-teal);
+            color: white;
+            text-align: center;
+            padding: 20px;
+            font-size: 11px;
+            line-height: 1.6;
+        }
+
+        .footer a {
+            color: white;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="page">
+    <div class="top-accent"></div>
+    
+    <div class="content">
+        <div class="logo">
+            <div class="logo-text">N26</div>
+        </div>
+
+        <div class="header-grid">
+            <div class="customer-info">
+                <strong>
+                    {{ "Mr " if person.gender == "Male" else "Mrs " if person.gender == "Female" else "" }}{{ person._name }}
+                </strong><br>
+					{{ person._address.replace('\n', '<br>') | safe }}
+            </div>
+            <div class="account-meta">
+                <table>
+                    <tr>
+                        <td class="label">Account number:</td>
+                        <td>{{ iban[-10:] }}</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Card number:</td>
+                        <td>Visa 2245 **** **** 7899</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Statement issuing date:</td>
+                        <td>{{ statement._issue_date }}</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Statement period:</td>
+                        <td>{{ transactions[0].date }} to {{ transactions[-1].date}}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="summary-title">Account Summary</div>
+        
+        <table class="transaction-table">
+            <thead>
+                <tr>
+                    <th style="width: 10%;">Date</th>
+                    <th style="width: 35%;">Transaction details</th>
+                    <th style="width: 10%;">Amount</th>
+                    <th style="width: 10%;">Currency</th>
+                    <th style="width: 10%;">Credits</th>
+                    <th style="width: 10%;">Debits</th>
+                    <th style="width: 15%;">Balance at the end</th>
+                </tr>
+            </thead>
+            <tbody>
+				{% for t in transactions[1:] %}
+                <tr>
+                    <td>{{ t.date[0:2] }}.{% set m = t.date[3:6] %}{% if m=='Jan' %}01{% elif m=='Feb' %}02{% elif m=='Mar' %}03{% elif m=='Apr' %}04{% elif m=='May' %}05{% elif m=='Jun' %}06{% elif m=='Jul' %}07{% elif m=='Aug' %}08{% elif m=='Sep' %}09{% elif m=='Oct' %}10{% elif m=='Nov' %}11{% elif m=='Dec' %}12{% endif %}.{{ t.date[-2:] }}</td>
+                    <td>{{ t.merchant }}</td>
+	                {% if not t.debit %}
+                    	<td>{{ t.credit }}</td>
+                    	<td>EUR</td>
+                    	<td>+{{ t.credit }}</td>
+                    	<td></td>
+	                {% else %}
+						<td>{{ t.debit }}</td>
+                    	<td>EUR</td>
+                    	<td></td>
+                    	<td>-{{ t.debit }}</td>
+                	{% endif %}
+                </tr>
+                <tr class="day-summary-row">
+                    <td colspan="6">Balance at the end of day</td>
+                    <td class="text-right">{{ t.balance }}</td>
+                </tr>
+				{% endfor %}
+            </tbody>
+        </table>
+
+        <div class="total-bar">
+            <span class="total-label">TOTAL</span>
+            <span>{{ transactions[-1].balance }}</span>
+        </div>
+    </div>
+
+    <div class="footer">
+        Address: Kurfürstenstraße 72, 10787, Berlin, Germany<br>
+        Phone: (1-888-626-0626)<br>
+        Website: <a href="http://www.n26.com">www.n26.com</a>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,7 +1,7 @@
 {
 	"INPUT_DIR": "data/samples/html",
 	"OUTPUT_DIR": "data/synthetic/",
-	"ITERATIONS": 4,
+	"ITERATIONS": 1,
 	"BANKS": [{
 			"name": "BankAustria",
 			"origin": "de_AT",
@@ -21,12 +21,12 @@
 			"name": "HSBC",
 			"origin": "en_GB",
 			"BIC": "HSBCGB2L",
-			"isReadyToRender": true
+			"isReadyToRender": false
 		}, {
 			"name": "N26",
 			"origin": "de_DE",
 			"BIC": "NTSBDEB1",
-			"isReadyToRender": false
+			"isReadyToRender": true
 		}, {
 			"name": "RBS",
 			"origin": "en_GB",
