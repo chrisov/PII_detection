@@ -170,10 +170,10 @@
                 <tr><th colspan="2">Account Summary</th></tr>
             </thead>
             <tbody>
-                <tr><td style="text-align: left;">Opening Balance</td><td>{{ statement._balance }}</td></tr>
-                <tr><td style="text-align: left;">Payments In</td><td>{{ statement.calculate_total_credits() }}</td></tr>
-                <tr><td style="text-align: left;">Payments Out</td><td>{{ statement.calculate_total_debits() }}</td></tr>
-                <tr><td style="text-align: left;">Closing Balance</td><td><b>{{ statement._history[-1]['balance'] }}</b></td></tr>
+                <tr><td style="text-align: left;">Opening Balance</td><td>{{ "%.2f"|format(statement._balance) }}</td></tr>
+                <tr><td style="text-align: left;">Payments In</td><td>{{ "%.2f"|format(statement.calculate_total_credits()) }}</td></tr>
+                <tr><td style="text-align: left;">Payments Out</td><td>{{ "%.2f"|format(statement.calculate_total_debits()) }}</td></tr>
+                <tr><td style="text-align: left;">Closing Balance</td><td><b>{{ "%.2f"|format(statement._history[-1]['balance']) }}</b></td></tr>
             </tbody>
         </table>
     </div>
@@ -220,7 +220,7 @@
                 <td class="col-details"><b>BALANCE BROUGHT FORWARD</b></td>
                 <td class="col-out"></td>
                 <td class="col-in"></td>
-                <td class="col-bal">{{ statement._balance }}</td>
+                <td class="col-bal">{{ "%.2f"|format(statement._balance) }}</td>
             </tr>
 			{% for t in transactions[1:] %}
             <tr>
@@ -228,12 +228,12 @@
                 <td class="col-details">{{ t.merchant }}</td>
                 {% if not t.debit %}
                     <td class="col-out"></td>
-                    <td class="col-in">{{ t.credit }}</td>
+                    <td class="col-in">{{ "%.2f"|format(t.credit) }}</td>
                 {% else %}
-                    <td class="col-out">{{ t.debit }}</td>
+                    <td class="col-out">{{ "%.2f"|format(t.debit) }}</td>
                     <td class="col-in"></td>
                 {% endif %}
-                <td class="col-bal">{{ t.balance }}</td>
+                <td class="col-bal">{{ "%.2f"|format(t.balance) }}</td>
             </tr>
 			{% endfor %}
         </tbody>

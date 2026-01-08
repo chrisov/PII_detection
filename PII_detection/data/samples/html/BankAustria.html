@@ -98,9 +98,9 @@
 				<tr class="transaction-row">
 					<td class="px-3 py-2 whitespace-nowrap">{{ t.date }}</td>
 					<td class="px-3 py-2">{{ t.merchant }}</td>
-					<td class="px-3 py-2 text-right">{{ t.debit }}</td>
-					<td class="px-3 py-2 text-right">{{ t.credit }}</td>
-					<td class="px-3 py-2 text-right">{{ t.balance }}</td>
+					<td class="px-3 py-2 text-right">{{ "%.2f"|format(t.debit) }}</td>
+					<td class="px-3 py-2 text-right">{{ "%.2f"|format(t.credit) }}</td>
+					<td class="px-3 py-2 text-right">{{ "%.2f"|format(t.balance) }}</td>
 				{% endfor %}
 				</tr>
 			</tbody>
@@ -115,11 +115,11 @@
 		<div>
 			<div class="flex justify-between summary-line mt-1 font-bold text-gray-900">
 				<span class="w-2/3">Total Debits</span>
-				<span class="text-right font-normal">{{ statement.calculate_total_debits() }}</span>
+				<span class="text-right font-normal">{{ "%.2f"|format(statement.calculate_total_debits()) }}</span>
 			</div>
 			<div class="flex justify-between summary-line mt-1 font-bold text-gray-900">
 				<span class="w-2/3">Total Credits</span>
-				<span class="text-right font-normal">{{ statement.calculate_total_credits() }}</span>
+				<span class="text-right font-normal">{{ "%.2f"|format(statement.calculate_total_credits()) }}</span>
 			</div>
 			<div class="flex justify-between summary-line mt-1 font-bold text-gray-900">
 				<span class="w-2/3">Total Financing</span>
@@ -127,7 +127,7 @@
 			</div>
 			<div class="flex justify-between summary-line mt-1 font-bold text-gray-900">
 				<span class="w-2/3">Total Balance</span>
-				<span class="text-right font-normal">-</span>
+				<span class="text-right font-normal">"%.2f"|format(transactions[-1].balance)</span>
 			</div>
 		</div>
 		<div>

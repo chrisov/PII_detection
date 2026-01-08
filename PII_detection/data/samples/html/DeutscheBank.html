@@ -120,7 +120,7 @@
 				<div class="col-span-4">IBAN</div>
 				<div class="col-span-2">BIC (SWIFT)</div>
 				<!-- Alignment for Previous Balance (spans 4 columns) -->
-				<div class="col-span-4 text-right">Previous balance as at {{ transactions[0]["date"] }}</div>
+				<div class="col-span-4 text-right">Previous balance as at {{ "%.2f"|format(transactions[0]["date"]) }}</div>
 			</div>
 			<!-- Values Row -->
 			<div class="grid grid-cols-12 font-normal">
@@ -130,7 +130,7 @@
 				<div class="col-span-2">{{ bic }}</div>
 				<!-- Balance Value Column (aligns with the label above) -->
 				<div class="col-span-2 text-left">EUR</div>
-				<div class="col-span-2 text-right font-bold">+{{ statement._balance }}</div>
+				<div class="col-span-2 text-right font-bold">+{{ "%.2f"|format(statement._balance) }}</div>
 			</div>
 		</div>
 
@@ -155,11 +155,11 @@
 					<!-- <td class="pt-1.5 align-top font-normal"></td> -->
 					<td class="pt-1.5 pb-2 align-top transaction-text font-normal">{{ t.merchant }}</td>
 					{% if not t.credit %}
-						<td class="pt-1.5 text-right align-top font-normal">-{{ t.debit }}</td>
+						<td class="pt-1.5 text-right align-top font-normal">-{{ "%.2f"|format(t.debit) }}</td>
 						<td class="pt-1.5 text-right align-top font-normal"></td>
 					{% else %}
 						<td class="pt-1.5 text-right align-top font-normal"></td>
-						<td class="pt-1.5 text-right align-top font-normal">+{{ t.credit }}</td>
+						<td class="pt-1.5 text-right align-top font-normal">+{{ "%.2f"|format(t.credit) }}</td>
 					{% endif %}
 				</tr>
 				{% endfor %}

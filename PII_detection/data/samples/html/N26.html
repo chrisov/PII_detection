@@ -205,20 +205,20 @@
                     <td>{{ t.date[0:2] }}.{% set m = t.date[3:6] %}{% if m=='Jan' %}01{% elif m=='Feb' %}02{% elif m=='Mar' %}03{% elif m=='Apr' %}04{% elif m=='May' %}05{% elif m=='Jun' %}06{% elif m=='Jul' %}07{% elif m=='Aug' %}08{% elif m=='Sep' %}09{% elif m=='Oct' %}10{% elif m=='Nov' %}11{% elif m=='Dec' %}12{% endif %}.{{ t.date[-2:] }}</td>
                     <td>{{ t.merchant }}</td>
 	                {% if not t.debit %}
-                    	<td>{{ t.credit }}</td>
+                    	<td>{{ "%.2f"|format(t.credit) }}</td>
                     	<td>EUR</td>
-                    	<td>+{{ t.credit }}</td>
+                    	<td>+{{ "%.2f"|format(t.credit) }}</td>
                     	<td></td>
 	                {% else %}
-						<td>{{ t.debit }}</td>
+						<td>{{ "%.2f"|format(t.debit) }}</td>
                     	<td>EUR</td>
                     	<td></td>
-                    	<td>-{{ t.debit }}</td>
+                    	<td>-{{ "%.2f"|format(t.debit) }}</td>
                 	{% endif %}
                 </tr>
                 <tr class="day-summary-row">
                     <td colspan="6">Balance at the end of day</td>
-                    <td class="text-right">{{ t.balance }}</td>
+                    <td class="text-right">{{ "%.2f"|format(t.balance) }}</td>
                 </tr>
 				{% endfor %}
             </tbody>
@@ -226,7 +226,7 @@
 
         <div class="total-bar">
             <span class="total-label">TOTAL</span>
-            <span>{{ transactions[-1].balance }}</span>
+            <span>{{ "%.2f"|format(transactions[-1].balance) }}</span>
         </div>
     </div>
 

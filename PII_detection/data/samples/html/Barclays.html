@@ -144,7 +144,7 @@
                         <div class="w-[30%]">Start balance</div>
                         <div class="w-[15%] text-right pr-2"></div>
                         <div class="w-[15%] text-right pr-2"></div>
-                        <div class="w-1/5 text-right pr-2">{{ statement._balance }}</div>
+                        <div class="w-1/5 text-right pr-2">{{ "%.2f"|format(statement._balance) }}</div>
                     </div>
 
                     <!-- Row 3: Bill Payment (Nested 2) -->
@@ -158,9 +158,9 @@
                                 Bank Transfer from {{ t.merchant }}
                             {% endif %}
                         </div>
-                        <div class="w-[15%] text-right pr-2 transaction-cell">{{ t.debit }}</div>
-                        <div class="w-[15%] text-right pr-2 transaction-cell">{{ t.credit }}</div>
-                        <div class="w-1/5 text-right pr-2 transaction-cell">{{ t.balance }}</div>
+                        <div class="w-[15%] text-right pr-2 transaction-cell">{{ "%.2f"|format(t.debit) }}</div>
+                        <div class="w-[15%] text-right pr-2 transaction-cell">{{ "%.2f"|format(t.credit) }}</div>
+                        <div class="w-1/5 text-right pr-2 transaction-cell">{{ "%.2f"|format(t.balance) }}</div>
                     </div>
 				    {% endfor %}
                 </div>
@@ -198,19 +198,19 @@
                     <table class="w-full text-[10px] text-barclays-text-gray">
                         <tr>
                             <td class="pb-1">Start balance</td>
-                            <td class="text-right font-bold text-black border-b border-barclays-medium-blue-border">£{{ statement._balance }}</td>
+                            <td class="text-right font-bold text-black border-b border-barclays-medium-blue-border">£{{ "%.2f"|format(statement._balance) }}</td>
                         </tr>
                         <tr>
                             <td class="pt-1">Money in</td>
-                            <td class="text-right font-bold text-black">£{{ statement.calculate_total_credits() }}</td>
+                            <td class="text-right font-bold text-black">£{{ "%.2f"|format(statement.calculate_total_credits()) }}</td>
                         </tr>
                         <tr>
                             <td class="pb-1">Money out</td>
-                            <td class="text-right font-bold text-black border-b border-barclays-medium-blue-border">£{{ statement.calculate_total_debits() }}</td>
+                            <td class="text-right font-bold text-black border-b border-barclays-medium-blue-border">£{{ "%.2f"|format(statement.calculate_total_debits()) }}</td>
                         </tr>
                         <tr>
                             <td class="pt-1 font-bold text-barclays-dark-blue">End balance</td>
-                            <td class="text-right font-bold text-barclays-dark-blue">£{{ statement._history[-1]['balance'] }}</td>
+                            <td class="text-right font-bold text-barclays-dark-blue">£{{ "%.2f"|format(statement._history[-1]['balance']) }}</td>
                         </tr>
                     </table>
                 </div>
