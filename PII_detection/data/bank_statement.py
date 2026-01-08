@@ -12,7 +12,7 @@ class statement:
 		self._month = rd.randint(1, 12)
 		self._year = rd.randint(2015, 2025)
 		self._issue_date = date(self._year, self._month, cal.monthrange(self._year, self._month)[1]).strftime("%d %b %Y")
-		self._balance = round(rd.uniform(3000, 10000), 2)
+		self._balance = rd.randint(300000, 1000000) / 100.0
 		self._history = self.generate_transactions(synthetic_info, merchants, incomes)
 		self._previous_date = (datetime.strptime(self._history[0]["date"], "%d %b %Y") - timedelta(days=1)).strftime("%d %b %Y")
 		self._last_statement_date = self._history[-1]["date"]
@@ -39,7 +39,7 @@ class statement:
 					start_date=date(self._year, self._month, 1),
 					end_date=date(self._year, self._month, cal.monthrange(self._year, self._month)[1])),
 				"merchant": rd.choice(merchants),
-				"debit": round(rd.uniform(5, 500), 2),
+				"debit": rd.randint(500, 50000) / 100.0
 			})
 		return transactions
 
@@ -62,7 +62,7 @@ class statement:
 					start_date=date(self._year, self._month, 1),
 					end_date=date(self._year, self._month, cal.monthrange(self._year, self._month)[1])),
 				"merchant": incomes[i],
-				"credit": round(rd.uniform(300, 1000), 2),
+				"credit": rd.randint(30000, 100000) / 100.0
 			})
 		return transactions
 
@@ -88,7 +88,7 @@ class statement:
 		salary = [{
 			"date": date(self._year, self._month, 1),
 			"merchant": incomes[0],
-			"credit": round(rd.uniform(1000, 3000), 2),
+			"credit": rd.randint(100000, 300000) / 100.0
 			}]
 		transactions = [*salary, *debits, *credits]
 		transactions.sort(key=lambda transaction: transaction["date"])

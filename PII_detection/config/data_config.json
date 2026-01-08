@@ -26,12 +26,12 @@
 			"name": "N26",
 			"origin": "de_DE",
 			"BIC": "NTSBDEB1",
-			"isReadyToRender": true
+			"isReadyToRender": false
 		}, {
 			"name": "RBS",
 			"origin": "en_GB",
 			"BIC": "RBOSGB2L",
-			"isReadyToRender": false
+			"isReadyToRender": true
 		}, {
 			"name": "Revolut",
 			"origin": "lt_LT",

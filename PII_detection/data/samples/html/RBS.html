@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>RBS Statement Template</title>
+    <style>
+        :root {
+            --rbs-blue: #002d62;
+            --rbs-light-blue: #eef2f7;
+            --rbs-border: #bccada;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+            font-size: 11px;
+            color: #333;
+        }
+
+        .page {
+            width: 800px;
+            background: white;
+            margin: 0 auto;
+            padding: 40px;
+            min-height: 1000px;
+            position: relative;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        /* Header Area */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 30px;
+        }
+
+        .logo-area { display: flex; align-items: center; }
+        .logo-symbol { color: var(--rbs-blue); font-size: 40px; font-weight: bold; margin-right: 10px; }
+        .logo-text { color: var(--rbs-blue); font-size: 28px; font-weight: bold; line-height: 0.9; }
+        
+        .statement-title {
+            color: var(--rbs-blue);
+            font-size: 24px;
+            margin-left: 20px;
+        }
+
+        .account-identifiers {
+            text-align: right;
+            line-height: 1.4;
+        }
+
+        /* Information Grid */
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1.5fr;
+            gap: 2px;
+            background-color: white;
+            margin-bottom: 30px;
+        }
+
+        .info-box {
+            border: 1px solid var(--rbs-blue);
+        }
+
+        .info-header {
+            background-color: var(--rbs-blue);
+            color: white;
+            padding: 4px 8px;
+            font-weight: bold;
+        }
+
+        .info-content {
+            padding: 8px;
+            min-height: 60px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 8px;
+            background-color: var(--rbs-light-blue);
+            border-bottom: 1px solid white;
+        }
+
+        /* Transaction Table */
+        .transaction-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .transaction-table thead th {
+            background-color: var(--rbs-blue);
+            color: white;
+            text-align: left;
+            padding: 6px 8px;
+            border-right: 1px solid white;
+        }
+
+        .transaction-table td {
+            padding: 6px 8px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .col-date { width: 15%; }
+        .col-type { width: 12%; }
+        .col-desc { width: 43%; }
+        .col-in { width: 10%; text-align: right; }
+        .col-out { width: 10%; text-align: right; }
+        .col-bal { width: 10%; text-align: right; background-color: var(--rbs-light-blue); font-weight: bold; }
+
+        .footer {
+            margin-top: 40px;
+            font-size: 9px;
+            color: #666;
+            border-top: 1px solid #ccc;
+            padding-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="page">
+    <div class="header">
+        <div class="logo-area">
+            <div class="logo-symbol">※</div>
+            <div class="logo-text">RBS<br><small style="font-size: 10px; font-weight: normal;">The Royal Bank of Scotland</small></div>
+            <div class="statement-title">Statement</div>
+        </div>
+        <div class="account-identifiers">
+            Account Number: 1111111<br>
+            Sort Code: 16-10-00<br>
+            BIC: {{ bic }}<br>
+            IBAN: {{ iban }}
+        </div>
+    </div>
+
+    <div style="text-align: right; margin-bottom: 10px; font-weight: bold; color: var(--rbs-blue);">
+        {{ person._name }}<br>
+        CURRENT ACCOUNT
+    </div>
+
+    <div class="info-grid">
+        <div class="info-box">
+            <div class="info-header">Branch Details</div>
+            <div class="info-content">
+                ANY BRANCH<br>ANY STREET<br>ANY TOWN<br><br>AN1 TWN
+            </div>
+        </div>
+        <div class="info-box">
+            <div class="info-header">Your Details</div>
+            <div class="info-content">
+                {{ person._name }}<br>{{ person._address}}
+            </div>
+        </div>
+        <div class="info-box">
+            <div class="info-header" style="display: flex; justify-content: space-between;">
+                <span>Period</span>
+                <span>{{ transactions[0]["date"] }} to {{ statement._last_statement_date }}</span>
+            </div>
+            <div class="summary-row"><span>Previous Balance</span><span>£{{ "%.2f"|format(statement._balance)}}</span></div>
+            <div class="summary-row"><span>Paid Out</span><span>£{{ "%.2f"|format(statement.calculate_total_debits()) }}</span></div>
+            <div class="summary-row"><span>Paid In</span><span>£{{ "%.2f"|format(statement.calculate_total_credits()) }}</span></div>
+            <div class="summary-row" style="background-color: var(--rbs-blue); color: white;">
+                <span>New Balance</span><span>£{{ "%.2f"|format(transactions[-1].balance) }}</span>
+            </div>
+        </div>
+    </div>
+
+    <table class="transaction-table">
+        <thead>
+            <tr>
+                <th class="col-date">Date</th>
+                <th class="col-type">Type</th>
+                <th class="col-description">Description</th>
+                <th class="col-in">Paid In</th>
+                <th class="col-out">Paid Out</th>
+                <th class="col-bal">Balance</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td colspan="5">BRIGHT FORWARD</td>
+                <td class="col-bal">{{ "%.2f"|format(statement._balance) }}</td>
+            </tr>
+			{% for t in transactions[1:] %}
+				<tr>
+					<td class="col-date">{{ t.date }}</td>
+	                {% if not t.debit %}
+						<td class="col-type">AUTOMATED PAY IN</td>
+						<td class="col-description">{{ t.merchant }}</td>
+						<td class="col-in">{{ "%.2f"|format(t.credit) }}</td>
+						<td class="col-out"></td>
+					{% else %}
+						<td class="col-type">Faster Payment</td>
+						<td class="col-description">{{ t.merchant }}</td>
+						<td class="col-in"></td>
+						<td class="col-out">{{ "%.2f"|format(t.debit) }}</td>
+					{% endif %}
+						<td class="col-bal">{{ "%.2f"|format(t.balance) }}</td>
+				</tr>
+			{% endfor %}
+        </tbody>
+    </table>
+
+    <div class="footer">
+        Royal Bank of Scotland Plc. Registered Office, The Mound, Edinburgh EH1 1YZ. Registered in Scotland number SC327000.<br>
+        Authorized by the Prudential Regulation Authority and regulated by the Financial Conduct and the Prudential Regulation authority.
+    </div>
+</div>
+
+</body>
+</html>
