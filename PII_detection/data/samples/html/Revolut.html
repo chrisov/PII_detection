@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+            color: #191c1f;
+        }
+
+        .page {
+            width: 800px;
+            background: white;
+            margin: 0 auto;
+            padding: 50px;
+            min-height: 1000px;
+            position: relative;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 60px;
+        }
+
+        .brand-logo {
+            font-size: 32px;
+            font-weight: 700;
+            letter-spacing: -1px;
+        }
+
+        .statement-type {
+            text-align: right;
+        }
+
+        .statement-type h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .meta-text {
+            font-size: 11px;
+            color: #707070;
+            margin-top: 4px;
+        }
+
+        /* Customer and Account Info */
+        .info-section {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 50px;
+            font-size: 14px;
+        }
+
+        .customer-address {
+            line-height: 1.5;
+        }
+
+        .account-identifiers {
+            text-align: right;
+            display: grid;
+            grid-template-columns: auto auto;
+            gap: 5px 20px;
+        }
+
+        .id-label { font-weight: 600; text-align: left; }
+        .id-value { text-align: right; font-family: monospace; }
+
+        /* Sections */
+        h2 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        /* Balance Summary Table */
+        .summary-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 40px;
+        }
+
+        .summary-table th {
+            text-align: left;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 10px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .summary-table td {
+            padding: 12px 0;
+            font-size: 13px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .summary-table .total-row td {
+            font-weight: 700;
+            border-top: 1px solid #191c1f;
+            border-bottom: none;
+        }
+
+        .text-right { text-align: right !important; }
+
+        /* Transaction Table */
+        .transaction-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .transaction-table th {
+            text-align: left;
+            font-size: 12px;
+            padding: 10px 5px;
+            border-bottom: 1px solid #191c1f;
+        }
+
+        .transaction-table td {
+            padding: 10px 5px;
+            font-size: 12px;
+            vertical-align: top;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .sub-details {
+            display: block;
+            font-size: 9px;
+            color: #707070;
+            margin-top: 3px;
+            line-height: 1.2;
+        }
+
+        /* Footer */
+        .footer {
+            position: absolute;
+            bottom: 40px;
+            left: 50px;
+            right: 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            font-size: 9px;
+            color: #707070;
+            border-top: 1px solid #e0e0e0;
+            padding-top: 20px;
+        }
+
+        .footer-legal {
+            width: 70%;
+            line-height: 1.3;
+        }
+
+        .footer-brand {
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+
+<div class="page">
+    <div class="header">
+        <div class="brand-logo">Revolut</div>
+        <div class="statement-type">
+            <h1>EUR Statement</h1>
+            <div class="meta-text">Generated on the {{ statement._issue_date[3:6] }} {{ statement._issue_date[0:2] }}, {{ statement._issue_date[7:11] }}</div>
+            <div class="meta-text">Revolut Bank UAB</div>
+        </div>
+    </div>
+
+    <div class="info-section">
+        <div class="customer-address">
+            <strong>Gogu Daniel</strong><br>
+            Bratianu 44<br>
+            030177<br>
+            București<br>
+            București
+        </div>
+        <div class="account-identifiers">
+            <span class="id-label">IBAN</span> <span class="id-value">{{ iban }}</span>
+            <span class="id-label">BIC</span> <span class="id-value">{{ bic }}</span>
+        </div>
+    </div>
+
+    <h2>Balance summary</h2>
+    <table class="summary-table">
+        <thead>
+            <tr>
+                <th style="width: 40%;">Product</th>
+                <th class="text-right">Opening balance</th>
+                <th class="text-right">Money out</th>
+                <th class="text-right">Money in</th>
+                <th class="text-right">Closing balance</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Account (Current Account)</td>
+                <td class="text-right">€{{ "%.2f"|format(statement._balance)}}</td>
+                <td class="text-right">€{{ "%.2f"|format(statement.calculate_total_credits()) }}</td>
+                <td class="text-right">€{{ "%.2f"|format(statement.calculate_total_debits()) }}</td>
+                <td class="text-right">€{{ "%.2f"|format(transactions[-1].balance) }}</td>
+            </tr>
+            <tr>
+                <td>Account (Demand Deposit)</td>
+                <td class="text-right">€0.00</td>
+                <td class="text-right">€0.00</td>
+                <td class="text-right">€0.00</td>
+                <td class="text-right">€0.00</td>
+            </tr>
+            <tr class="total-row">
+                <td>Total</td>
+				<td class="text-right">€{{ "%.2f"|format(statement._balance)}}</td>
+                <td class="text-right">€{{ "%.2f"|format(statement.calculate_total_credits()) }}</td>
+                <td class="text-right">€{{ "%.2f"|format(statement.calculate_total_debits()) }}</td>
+                <td class="text-right">€{{ "%.2f"|format(transactions[-1].balance) }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <p style="font-size: 8px; color: #707070; margin-top: -30px;">The balance on your statement might differ from the balance shown in your app. The statement balance only reflects completed transactions, while the app shows the balance available for use, which accounts for pending transactions.</p>
+
+    <h2>Account transactions {{ transactions[0]["date"] }} to {{ statement._last_statement_date }}</h2>
+    <table class="transaction-table">
+        <thead>
+            <tr>
+                <th style="width: 15%;">Date</th>
+                <th style="width: 45%;">Description</th>
+                <th style="width: 13%;" class="text-right">Money out</th>
+                <th style="width: 13%;" class="text-right">Money in</th>
+                <th style="width: 14%;" class="text-right">Balance</th>
+            </tr>
+        </thead>
+        <tbody>
+			{% for t in transactions[1:] %}
+				<tr>
+					<td>{{ t.date }}</td>
+					<td>{{ t.merchant }}</td>
+					{% if not t.credit %}
+						<td class="text-right">€{{ "%.2f"|format(t.debit) }}</td>
+						<td class="text-right"></td>
+					{% else %}
+						<td class="text-right"></td>
+						<td class="text-right">€{{ "%.2f"|format(t.credit) }}</td>
+					{% endif %}
+					<td class="text-right">€{{ "%.2f"|format(t.balance) }}</td>
+				</tr>
+			{% endfor %}
+            <!-- <tr>
+                <td>Sep 14, 2022</td>
+                <td>
+                    Google Temporary Hold
+                    <span class="sub-details">To: Google Temporary Hold, London<br>Card: 535456******1556</span>
+                </td>
+                <td class="text-right">€0.00</td>
+                <td class="text-right"></td>
+                <td class="text-right">€0.00</td>
+            </tr> -->
+        </tbody>
+    </table>
+
+    <div class="footer">
+        <div class="footer-legal">
+            Revolut Bank UAB is a credit institution licensed in the Republic of Lithuania with company number 304580906 and authorisation code LB002119... [Rest of legal text omitted for brevity]... available at <span style="text-decoration: underline; color: #0000FF;">www.iidraudimas.lt</span>.
+        </div>
+        <div class="footer-brand">
+            © 2022 Revolut Bank UAB<br><br>
+            <strong>Page 1 of 1</strong>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

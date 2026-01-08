@@ -31,12 +31,12 @@
 			"name": "RBS",
 			"origin": "en_GB",
 			"BIC": "RBOSGB2L",
-			"isReadyToRender": true
+			"isReadyToRender": false
 		}, {
 			"name": "Revolut",
 			"origin": "lt_LT",
 			"BIC": "REVOLT21",
-			"isReadyToRender": false
+			"isReadyToRender": true
 		}, {
 			"name": "UniCredit",
 			"origin": "it_IT",
